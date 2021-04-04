@@ -11,9 +11,9 @@ public class TablutActionsFunction {
 	Game rules = new GameTablut();
 
 	private boolean moveIsValid(State state, Action action) {
-		State newState;
 		try {
-			newState = rules.checkMove(state, action);
+			State curState = state.clone();
+			State newState = rules.checkMove(curState, action);
 		} catch (Exception e) {
 			return false;
 		}
@@ -31,23 +31,16 @@ public class TablutActionsFunction {
 		int drow[] = {1, 0, -1, 0};
 		int dcol[] = {0, 1, 0, -1};
 		var possibleMoves = new ArrayList<Action>();
-		int row = 0, col = 0;
+		int row = 0, col = -1;
 		for (int c = 0; c < state.getNumberOf(color); c++) {
-			// FIXME: Bugged while loop to find pawn position
-			while (!state.getPawn(row, col).equalsPawn(color.toString())) {
+			do {
 				col++;
 				if (col == state.getBoard().length) { col = 0; row++; }
 				if (row >= state.getBoard().length) throw new ArrayIndexOutOfBoundsException();
-				System.out.println("Row " + row + ", col " + col + " = " + state.getPawn(row, col));
-				if (state.getPawn(row, col).equalsPawn(color.toString())) {
-					System.out.println("FOUND: " + state.getPawn(row, col) + " == " + color.toString());
-				} else {
-					System.out.println(state.getPawn(row, col) + " != " + color.toString());
-				}
-			}
-			System.out.println(color + " pawn n. " + c + " is in pos. (" + row + ", " + col + ")");
+			} while (!state.getPawn(row, col).equalsPawn(color.toString()));
 			for (int i = 0; i < drow.length; i++) {
-				for (int distance = 1; posIsValid(state, row + drow[i] * distance, col + dcol[i] * distance); distance++) {
+				boolean lastMoveWasValid = true;
+				for (int distance = 1; lastMoveWasValid && posIsValid(state, row + drow[i] * distance, col + dcol[i] * distance); distance++) {
 					// (0, 0) = top left
 					String from = state.getBox(row, col);
 					String to = state.getBox(row + drow[i] * distance, col + dcol[i] * distance);
@@ -55,7 +48,7 @@ public class TablutActionsFunction {
 					if (moveIsValid(state, curAction)) {
 						possibleMoves.add(curAction);
 					} else {
-						continue; // FIXME: Chesani will fail us if he sees this
+						lastMoveWasValid = false;
 					}
 				}
 			}
@@ -64,7 +57,6 @@ public class TablutActionsFunction {
 	}
 
 	public List<Action> getPossibleMoves(State state) throws IOException {
-		System.out.println("getPossibleMoves() called on " + state.getTurn() + "'s turn");
 
 		var possibleMoves = new ArrayList<Action>();
 
