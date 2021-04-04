@@ -74,6 +74,14 @@
         </java>
     </target>
 
+    <target name="neurowhite">
+        <java classname="it.unibo.ai.didattica.competition.tablut.client.TablutNeuroWhiteClient" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+        </java>
+    </target>
 
 
 </project>

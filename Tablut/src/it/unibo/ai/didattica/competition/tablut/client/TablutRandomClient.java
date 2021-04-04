@@ -236,6 +236,15 @@ public class TablutRandomClient extends TablutClient {
 							}
 						}
 					}
+					System.out.println("CIAO :)");
+					var ilMioContatore = 0;
+					for (var i : pawns) {
+						System.out.println("Pawn " + ilMioContatore);
+						for (var j : i) {
+							System.out.println(j + " ");
+						}
+						ilMioContatore++;
+					}
 
 					int[] selected = null;
 
