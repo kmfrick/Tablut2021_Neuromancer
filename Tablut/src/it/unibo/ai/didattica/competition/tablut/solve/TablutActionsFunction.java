@@ -35,21 +35,20 @@ public class TablutActionsFunction {
 		for (int c = 0; c < state.getNumberOf(color); c++) {
 			// FIXME: Bugged while loop to find pawn position
 			while (!state.getPawn(row, col).equalsPawn(color.toString())) {
-				System.out.println("Row " + row + ", col " + col + " = " + state.getPawn(row, col));
-				if (state.getPawn(row, col).equalsPawn(color.toString())) {
-					System.out.println(state.getPawn(row, col) + " == " + color.toString());
-				} else {
-					System.out.println(state.getPawn(row, col) + " != " + color.toString());
-				}
 				col++;
 				if (col == state.getBoard().length) { col = 0; row++; }
 				if (row >= state.getBoard().length) throw new ArrayIndexOutOfBoundsException();
+				System.out.println("Row " + row + ", col " + col + " = " + state.getPawn(row, col));
+				if (state.getPawn(row, col).equalsPawn(color.toString())) {
+					System.out.println("FOUND: " + state.getPawn(row, col) + " == " + color.toString());
+				} else {
+					System.out.println(state.getPawn(row, col) + " != " + color.toString());
+				}
 			}
 			System.out.println(color + " pawn n. " + c + " is in pos. (" + row + ", " + col + ")");
 			for (int i = 0; i < drow.length; i++) {
 				for (int distance = 1; posIsValid(state, row + drow[i] * distance, col + dcol[i] * distance); distance++) {
 					// (0, 0) = top left
-
 					String from = state.getBox(row, col);
 					String to = state.getBox(row + drow[i] * distance, col + dcol[i] * distance);
 					var curAction = new Action(from, to, state.getTurn());
