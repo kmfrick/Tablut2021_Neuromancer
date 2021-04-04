@@ -20,10 +20,10 @@ public class TablutActionsFunction {
 		return true;
 	}
 
-	private boolean posIsValid(int row, int col) {
-		final int MAX_DIST = 8;
-		if (row < 0 || row > MAX_DIST) return false;
-		if (col < 0 || col > MAX_DIST) return false;
+
+	private boolean posIsValid(State state, int row, int col) {
+		if (row < 0 || row >= state.getBoard().length) return false;
+		if (col < 0 || col >= state.getBoard().length) return false;
 		return true;
 	}
 
@@ -33,6 +33,7 @@ public class TablutActionsFunction {
 		var possibleMoves = new ArrayList<Action>();
 		int row = 0, col = 0;
 		for (int c = 0; c < state.getNumberOf(color); c++) {
+			// FIXME: Bugged while loop to find pawn position
 			while (!state.getPawn(row, col).equalsPawn(color.toString())) {
 				System.out.println("Row " + row + ", col " + col + " = " + state.getPawn(row, col));
 				if (state.getPawn(row, col).equalsPawn(color.toString())) {
@@ -41,17 +42,16 @@ public class TablutActionsFunction {
 					System.out.println(state.getPawn(row, col) + " != " + color.toString());
 				}
 				col++;
-				if (col == 9) { col = 0; row++; }
-			} 
+				if (col == state.getBoard().length) { col = 0; row++; }
+				if (row >= state.getBoard().length) throw new ArrayIndexOutOfBoundsException();
+			}
 			System.out.println(color + " pawn n. " + c + " is in pos. (" + row + ", " + col + ")");
 			for (int i = 0; i < drow.length; i++) {
-				for (int distance = 1; posIsValid(row + drow[i] * distance, col + dcol[i] * distance); distance++) {
+				for (int distance = 1; posIsValid(state, row + drow[i] * distance, col + dcol[i] * distance); distance++) {
 					// (0, 0) = top left
 
 					String from = state.getBox(row, col);
-					System.out.println("from: " + from);
 					String to = state.getBox(row + drow[i] * distance, col + dcol[i] * distance);
-					System.out.println("to: " + to);
 					var curAction = new Action(from, to, state.getTurn());
 					if (moveIsValid(state, curAction)) {
 						possibleMoves.add(curAction);
@@ -65,7 +65,7 @@ public class TablutActionsFunction {
 	}
 
 	public List<Action> getPossibleMoves(State state) throws IOException {
-		System.out.println("getPossibleMoves() called");
+		System.out.println("getPossibleMoves() called on " + state.getTurn() + "'s turn");
 
 		var possibleMoves = new ArrayList<Action>();
 
