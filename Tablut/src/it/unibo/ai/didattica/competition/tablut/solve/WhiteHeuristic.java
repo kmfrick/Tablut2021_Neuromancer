@@ -6,6 +6,11 @@ public class WhiteHeuristic {
 	double weightKingThreat = -1.0; 	// How threatening is a Black piece for the King
 	double weightScatter = 1.0; 		// Try not to move pieces that have just been moved
 
+	public static double eval(State state, int depth){
+		
+	}
+}
+
 		
 	private static double calculateRhombusVal(State state) {
 

@@ -237,4 +237,16 @@ public abstract class State {
 		return count;
 	}
 
+	public Coord getKingPos(){
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (board[i][j] == Pawn.KING){
+					Coord result = new Coord(i,j);
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+
 }
