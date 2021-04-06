@@ -238,15 +238,17 @@ public abstract class State {
 	}
 
 	public Coord getKingPos(){
+		Coord result = new Coord(-1,-1);
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				if (board[i][j] == Pawn.KING){
-					Coord result = new Coord(i,j);
+					result.setRow(i);
+					result.setColumn(j);
 					return result;
 				}
 			}
 		}
-		return null;
+		return result;
 	}
 
 }

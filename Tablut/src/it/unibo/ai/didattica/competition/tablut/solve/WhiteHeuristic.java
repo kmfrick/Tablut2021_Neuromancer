@@ -1,3 +1,5 @@
+package it.unibo.ai.didattica.competition.tablut.domain;
+
 public class WhiteHeuristic {
 	double weightPieces = 1.0; 			// Number of white pieces on the board
 	double weightRhombus = 1.0; 	// Avoid rhombus being blocked
@@ -6,11 +8,34 @@ public class WhiteHeuristic {
 	double weightKingThreat = -1.0; 	// How threatening is a Black piece for the King
 	double weightScatter = 1.0; 		// Try not to move pieces that have just been moved
 
-	public static double eval(State state, int depth){
-		
+	private static double calculateKingCentreDistance(Coord kingPos){
+		double result = 0.0;
+		result += Math.abs(kingPos.getRow() - 4);
+		result += Math.abs(kingPos.getColumn() - 4);
+		return result;
 	}
-}
 
+	private static int calculateSurroundingBlackPawn(State state, Coord kingPos){
+		int result = 0;
+		State.Pawn pawn = state.getPawn(kingPos.getRow() + 1, kingPos.getColumn());
+		if(pawn == State.Pawn.BLACK) result++;
+		pawn = state.getPawn(kingPos.getRow() - 1, kingPos.getColumn());
+		if(pawn == State.Pawn.BLACK) result++;
+		pawn = state.getPawn(kingPos.getRow(), kingPos.getColumn() + 1);
+		if(pawn == State.Pawn.BLACK) result++;
+		pawn = state.getPawn(kingPos.getRow(), kingPos.getColumn() - 1);
+		if(pawn == State.Pawn.BLACK) result++;
+		//TODO: considerare il trono come casella "speciale", ovvero la casella (4,4)
+		return result;
+	}
+
+	private static int numberOfBlackPawn(State state){
+		return state.getNumberOf(State.Pawn.BLACK);
+	}
+
+	private static int numberOfWhitePawn(State state){
+		return state.getNumberOf(State.Pawn.WHITE);
+	}
 		
 	private static double calculateRhombusVal(State state) {
 
@@ -40,12 +65,14 @@ public class WhiteHeuristic {
 				if (state.getPawn(r, c).equalsPawn(State.Pawn.KING)) {
 					kingRow = r;
 					kingCol = c;
+				}
 			}
 		}
 		for (int r = 0; r < state.getBoard().length; r++) {
 			for (int c = 0; c < state.getBoard().length; c++) {
 				if (state.getPawn(r, c).equalsPawn(color.toString())) {
-					kingDistance += Math.abs(r - kingRow) + Math.abs(c - kingCol);	// Manhattan distance
+					kingDistance += Math.abs(r - kingRow) + Math.abs(c - kingCol);    // Manhattan distance
+				}
 			}
 		}
 
@@ -54,9 +81,11 @@ public class WhiteHeuristic {
 	}
 
 	private static double calculateKingExit(State state) {
+		/*
 		final int exitRow[] = {};
 		final int exitColumn[] = {};
 		// Find the King. Should there be a function for this?
+				//yes, in the state class
 		int kingRow = -1;
 		int kingCol = -1;
 		for (int r = 0; r < state.getBoard().length && kingRow < 0; r++) {
@@ -64,11 +93,12 @@ public class WhiteHeuristic {
 				if (state.getPawn(r, c).equalsPawn(State.Pawn.KING)) {
 					kingRow = r;
 					kingCol = c;
+				}
 			}
-		}
+		}*/ //implementata in classi Coord e State
 
 		// If there are two free exits, and the King can reach the row or column of either in one move, White wins because Black can't block both
-		// TODO: Implement this, and return an infinitely high heuristic for this. 
+		// TODO: Implement this, and return an infinitely high heuristic for this.
 
 		int closestExit = 0;
 		double closestDist = 81;
@@ -82,6 +112,7 @@ public class WhiteHeuristic {
 		}
 		return 1.0f / closestDist;
 	}
+
 
 	private static double calculateScatter(State state) {
 		// TODO: Implement a penalty for moves which involve the last moved piece
@@ -103,8 +134,17 @@ public class WhiteHeuristic {
 		h += weightKingDistance * kingDistance;
 		h += weightKingThreat * kingThreat;
 		h += weightScatter * scatter;
-		
-		return 
+
+		return h;
+	}
+
+	public static double eval(State state, int depth){
+		double result = 0.0;
+		Coord kingPos = state.getKingPos();
+		//other computations for other weights
+
+		result += calculateKingCentreDistance(kingPos);
+
 	}
 
 
