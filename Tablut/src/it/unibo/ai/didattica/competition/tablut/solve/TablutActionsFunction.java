@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class TablutActionsFunction {
+public class TablutActionsFunction implements ActionFunction {
+	// TODO: Implementare le interfacce AIMA
 
 	Game rules = new GameTablut();
 
