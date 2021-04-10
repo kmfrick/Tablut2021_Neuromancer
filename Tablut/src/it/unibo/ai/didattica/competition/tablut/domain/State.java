@@ -251,4 +251,45 @@ public abstract class State {
 		return result;
 	}
 
+	/*
+		Metodi per controllare se sulla stessa riga (destra o sinistra) o colonna (sopra e sotto) ci sono delle pedine.
+		E restituiscono il colore della più vicina. Altrimenti EMPTY.
+	 */
+
+	public static Pawn checkRight(Coord coord){
+		int row = coord.getRow();
+		int column = coord.getColumn();
+		for(int j = column + 1; j < 9; j++){
+			if(board[row][j] != Pawn.EMPTY) return getPawn(row, j);
+		}
+		return Pawn.EMPTY;
+	}
+
+	public static Pawn checkLeft(Coord coord){
+		int row = coord.getRow();
+		int column = coord.getColumn();
+		for(int j = column - 1; j >= 0; j--){
+			if(board[row][j] != Pawn.EMPTY) return getPawn(row, j);
+		}
+		return Pawn.EMPTY;
+	}
+
+	public static Pawn checkUp(Coord coord){
+		int row = coord.getRow();
+		int column = coord.getColumn();
+		for(int i = row - 1; i > 0; i--){
+			if(board[i][column] != Pawn.EMPTY) return getPawn(i, column);
+		}
+		return Pawn.EMPTY;
+	}
+
+	public static Pawn checkBottom(Coord coord){
+		int row = coord.getRow();
+		int column = coord.getColumn();
+		for(int i = row + 1; i < 9; i++){
+			if(board[i][column] != Pawn.EMPTY) return getPawn(i, column);
+		}
+		return Pawn.EMPTY;
+	}
+
 }

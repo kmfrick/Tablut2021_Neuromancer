@@ -29,6 +29,41 @@ public class WhiteHeuristic {
 		return result;
 	}
 
+	//metodo che valuta se l'avversario può mangiare il pezzo appena mosso con una sola mossa successiva
+	//newCoord = nuova coordinata del pezzo mosso
+	private static int threat(State state, Coord newCoord){
+		int result = 0;
+		State.Pawn pawnColumnBotton, pawnColumnUp, pawnRowRight, pawnRowLeft;
+		if(state.getPawn(newCoord.getRow(), newCoord.getColumn()) == State.Pawn.WHITE){ // il pezzo mosso è bianco
+			pawnColumnBotton = state.getPawn(newCoord.getRow() + 1, newCoord.getColumn());
+			pawnColumnUp = state.getPawn(newCoord.getRow() + -1, newCoord.getColumn());
+			pawnRowRight = state.getPawn(newCoord.getRow(), newCoord.getColumn() + 1);
+			pawnRowRight = state.getPawn(newCoord.getRow(), newCoord.getColumn() - 1);
+			if(pawnColumnBotton == State.Pawn.BLACK){ //controllo se nella stessa colonna e di una riga in basso c'è adiacente un pezzo nero
+				//TODO: implementare il controllo, a questo punto, di tutta la colonna
+			}
+		}
+		return result;
+	}
+
+	//dare un valore al peso molto alto, qui restituiamo semplicemente il moltiplicatore
+	private static int winWithAMove(State state, Coord kingCoord){
+		int result = 0;
+		int count = 0;
+		if(state.getTurn() == State.Turn.WHITE){ //turno del bianco
+			if(state.checkRight(kingCoord) == State.Pawn.EMPTY ||
+					state.checkLeft(kingCoord) == State.Pawn.EMPTY ||
+					state.checkUp(kingCoord) == State.Pawn.EMPTY ||
+					state.checkBottom(kingCoord) == State.Pawn.EMPTY){
+				return 1;
+			} else return 0;
+		} else{ //turno del nero (?)
+
+		}
+
+
+	}
+
 	private static int numberOfBlackPawn(State state){
 		return state.getNumberOf(State.Pawn.BLACK);
 	}
@@ -36,6 +71,8 @@ public class WhiteHeuristic {
 	private static int numberOfWhitePawn(State state){
 		return state.getNumberOf(State.Pawn.WHITE);
 	}
+
+
 		
 	private static double calculateRhombusVal(State state) {
 
