@@ -73,6 +73,24 @@ public class BlackHeuristic {
 		 }
 		return points/tot;
 	}
+	static  private  double calculateRowColCover (State state) {//numero di collenne e righe coperte
+		int points=0, j;
+		double tot=18;
+		for(int i=0; i<9; i++) {
+			for( j=0; j<9&&state.getPawn(i, j)!=State.Pawn.BLACK; j++);
+			if(j==9)
+				points++;
+		}
+		for(int i=0; i<9; i++) {
+			for( j=0; j<9&&state.getPawn(j, i)!=State.Pawn.BLACK; j++);
+			if(j==9)
+				points++;
+		}
+		return points/tot;
+	}
+	public static double eval(State state) {
+		return 0;
+	}
 
 }
 			 

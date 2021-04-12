@@ -1,4 +1,7 @@
-package it.unibo.ai.didattica.competition.tablut.domain;
+package it.unibo.ai.didattica.competition.tablut.solve;
+
+import it.unibo.ai.didattica.competition.tablut.domain.Coord;
+import it.unibo.ai.didattica.competition.tablut.domain.State;
 
 public class WhiteHeuristic {
 	double weightPieces = 1.0; 			// Number of white pieces on the board
@@ -175,7 +178,7 @@ public class WhiteHeuristic {
 		return h;
 	}
 
-	public static double eval(State state, int depth){
+	public static double eval(State state/*, int depth*/){
 		double result = 0.0;
 		Coord kingPos = state.getKingPos();
 		//other computations for other weights
