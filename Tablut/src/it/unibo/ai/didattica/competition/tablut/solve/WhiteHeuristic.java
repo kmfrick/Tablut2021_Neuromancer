@@ -44,6 +44,10 @@ public class WhiteHeuristic {
 			pawnRowRight = state.getPawn(newCoord.getRow(), newCoord.getColumn() - 1);
 			if(pawnColumnBotton == State.Pawn.BLACK){ //controllo se nella stessa colonna e di una riga in basso c'è adiacente un pezzo nero
 				//TODO: implementare il controllo, a questo punto, di tutta la colonna
+				State.Pawn pawnUp = state.checkUp(newCoord);
+				if(pawnUp == State.Pawn.BLACK) return 1;
+				//TODO: per ogni casella sopra fare checkRight e checkLeft
+				int column = newCoord.getColumn(); //...
 			}
 		}
 		return result;
@@ -61,10 +65,12 @@ public class WhiteHeuristic {
 				return 1;
 			} else return 0;
 		} else{ //turno del nero (?)
-
+			if(state.checkRight(kingCoord) == State.Pawn.EMPTY) count++;
+			if(state.checkLeft(kingCoord) == State.Pawn.EMPTY) count++;
+			if(state.checkUp(kingCoord) == State.Pawn.EMPTY) count++;
+			if(state.checkBottom(kingCoord) == State.Pawn.EMPTY) count++;
+			if(count > 1) return 1; else return 0;
 		}
-
-
 	}
 
 	private static int numberOfBlackPawn(State state){
@@ -73,24 +79,6 @@ public class WhiteHeuristic {
 
 	private static int numberOfWhitePawn(State state){
 		return state.getNumberOf(State.Pawn.WHITE);
-	}
-
-
-		
-	private static double calculateRhombusVal(State state) {
-
-		final int rhombusRow[] = {}; // TODO: Fill
-		final int rhombusCol[] = {};
-		int blackPiecesOnRhombus = 0;
-		for (int i = 0; i < rhombusRow.length; i++) {
-			if (state.getPawn(rhombusRow[i], rhombusCol[i]).equalsPawn(State.Pawn.BLACK)) {
-				blackPiecesOnRhombus++;
-			}
-		}
-
-		// TODO: It should be *even worse* if there's a whole side blocked
-		
-		return blackPiecesOnRhombus;
 	}
 
 	private static double calculateKingDistance(State state, State.Pawn color) {
@@ -120,44 +108,12 @@ public class WhiteHeuristic {
 
 	}
 
-	private static double calculateKingExit(State state) {
-		/*
-		final int exitRow[] = {};
-		final int exitColumn[] = {};
-		// Find the King. Should there be a function for this?
-				//yes, in the state class
-		int kingRow = -1;
-		int kingCol = -1;
-		for (int r = 0; r < state.getBoard().length && kingRow < 0; r++) {
-			for (int c = 0; c < state.getBoard().length && kingCol < 0; c++) {
-				if (state.getPawn(r, c).equalsPawn(State.Pawn.KING)) {
-					kingRow = r;
-					kingCol = c;
-				}
-			}
-		}*/ //implementata in classi Coord e State
-
-		// If there are two free exits, and the King can reach the row or column of either in one move, White wins because Black can't block both
-		// TODO: Implement this, and return an infinitely high heuristic for this.
-
-		int closestExit = 0;
-		double closestDist = 81;
-
-		for (int i = 0; i < exitRow.length; i++) {
-			double curDist = Math.abs(kingRow - exitRow[i]) + Math.abs(kingCol - exitCol[i]);
-			if (curDist < closestDist) {
-				closestExit = i;
-				closestDist = curDist;
-			}
-		}
-		return 1.0f / closestDist;
-	}
-
-
 	private static double calculateScatter(State state) {
 		// TODO: Implement a penalty for moves which involve the last moved piece
+		return 0.0;
 	}
 
+	/*
 	public static double calculateHeuristic(State state) {
 		double h = 0;
 
@@ -176,7 +132,7 @@ public class WhiteHeuristic {
 		h += weightScatter * scatter;
 
 		return h;
-	}
+	}*/
 
 	public static double eval(State state/*, int depth*/){
 		double result = 0.0;

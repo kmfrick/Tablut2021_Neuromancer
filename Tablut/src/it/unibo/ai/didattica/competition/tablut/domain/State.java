@@ -292,4 +292,8 @@ public abstract class State {
 		return Pawn.EMPTY;
 	}
 
+	/*
+	TODO: Funzione che mi restituisce uno score per il posizionamento del re in quella casella.
+	 */
+
 }
