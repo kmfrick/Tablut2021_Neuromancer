@@ -1,0 +1,3 @@
+[submodule "Tablut/src/aima"]
+	path = Tablut/src/aima
+	url = git@github.com:kmfrick/aima-java.git
