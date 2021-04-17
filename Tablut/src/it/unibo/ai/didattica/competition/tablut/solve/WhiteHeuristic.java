@@ -10,14 +10,35 @@ public class WhiteHeuristic {
 	double weightKingExit = 1.0; 		// How far the King is from the closest exit
 	double weightKingThreat = -1.0; 	// How threatening is a Black piece for the King
 	double weightScatter = 1.0; 		// Try not to move pieces that have just been moved
-
+	static int[][] kingScoreM=new int[9][9];
+	static{
+		for(int i=0; i<9; i++) {
+			for(int j=0; j<9; j++) {
+				kingScoreM[i][j] += Math.abs(j - 4)+Math.abs(i-4);
+				if(kingScoreM[i][j]>4)
+					kingScoreM[i][j]=4;
+			}
+		}
+		kingScoreM[2][6]=5;
+		kingScoreM[2][2]=5;
+		kingScoreM[6][6]=5;
+		kingScoreM[6][2]=5;//4 vie libere
+		kingScoreM[1][3]=1;//2 lati contro gli accampamenti
+		kingScoreM[1][5]=1;
+		kingScoreM[7][3]=1;
+		kingScoreM[7][5]=1;
+		kingScoreM[3][1]=1;
+		kingScoreM[3][7]=1;
+		kingScoreM[5][1]=1;
+		kingScoreM[5][7]=1;
+	}
 	private static double calculateKingCentreDistance(Coord kingPos){
 		double result = 0.0;
 		result += Math.abs(kingPos.getRow() - 4);
 		result += Math.abs(kingPos.getColumn() - 4);
 		return result;
 	}
-
+	
 	private static int calculateSurroundingBlackPawn(State state, Coord kingPos){
 		int result = 0;
 		State.Pawn pawn = state.getPawn(kingPos.getRow() + 1, kingPos.getColumn());
@@ -112,7 +133,10 @@ public class WhiteHeuristic {
 		// TODO: Implement a penalty for moves which involve the last moved piece
 		return 0.0;
 	}
-
+	private static double getKingScore(State state) {
+		Coord kingCoor=state.getKingPos();
+		return kingScoreM[kingCoor.getRow()][kingCoor.getColumn()];
+	}
 	/*
 	public static double calculateHeuristic(State state) {
 		double h = 0;
