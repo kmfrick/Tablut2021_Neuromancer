@@ -256,7 +256,7 @@ public abstract class State {
 		E restituiscono il colore della più vicina. Altrimenti EMPTY.
 	 */
 
-	public static Pawn checkRight(Coord coord){
+	public Pawn checkRight(Coord coord){
 		int row = coord.getRow();
 		int column = coord.getColumn();
 		for(int j = column + 1; j < 9; j++){
@@ -265,7 +265,7 @@ public abstract class State {
 		return Pawn.EMPTY;
 	}
 
-	public static Pawn checkLeft(Coord coord){
+	public Pawn checkLeft(Coord coord){
 		int row = coord.getRow();
 		int column = coord.getColumn();
 		for(int j = column - 1; j >= 0; j--){
@@ -274,7 +274,7 @@ public abstract class State {
 		return Pawn.EMPTY;
 	}
 
-	public static Pawn checkUp(Coord coord){
+	public Pawn checkUp(Coord coord){
 		int row = coord.getRow();
 		int column = coord.getColumn();
 		for(int i = row - 1; i > 0; i--){
@@ -283,7 +283,7 @@ public abstract class State {
 		return Pawn.EMPTY;
 	}
 
-	public static Pawn checkBottom(Coord coord){
+	public Pawn checkBottom(Coord coord){
 		int row = coord.getRow();
 		int column = coord.getColumn();
 		for(int i = row + 1; i < 9; i++){
