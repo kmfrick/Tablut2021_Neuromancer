@@ -47,7 +47,7 @@ public class TablutNeuroClient extends TablutClient {
 		System.out.println("You are player " + this.getPlayer().toString() + "!");
 		String actionStringFrom = "";
 		String actionStringTo = "";
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			this.declareName();
 		} catch (Exception e) {
@@ -79,71 +79,111 @@ public class TablutNeuroClient extends TablutClient {
 				System.out.println("Error in game selection");
 				System.exit(4);
 		}
-		
+
 		search = new TablutMinimax(rules);
 
+		// still alive until you are playing
+		while (true) {
 
-		if (this.getPlayer() == State.Turn.WHITE) {
-			System.out.println("You are player " + this.getPlayer().toString() + "!");
-			while (true) {
-				try {
-					this.read();
-
-					if (this.getCurrentState().getTurn().equals(StateTablut.Turn.WHITE)) {
-						long startTime = System.currentTimeMillis();
-						Action a = search.makeDecision(state);
-						long estimatedTime = System.currentTimeMillis() - startTime;
-						System.out.println("Played move: " + a.toString());
-						System.out.println("Time to find move: " + estimatedTime/1000.0 + " seconds");
-						this.write(action);
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.BLACK)) {
-						System.out.println("Waiting for your opponent move... ");
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.WHITEWIN)) {
-						System.out.println("YOU WIN!");
-						System.exit(0);
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.BLACKWIN)) {
-						System.out.println("YOU LOSE!");
-						System.exit(0);
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.DRAW)) {
-						System.out.println("DRAW!");
-						System.exit(0);
-					}
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.exit(1);
-				}
+			// update the current state from the server
+			try {
+				this.read();
+			} catch (ClassNotFoundException | IOException e1) {
+				e1.printStackTrace();
+				System.exit(1);
 			}
-		} else {
-			System.out.println("You are player " + this.getPlayer().toString() + "!");
-			while (true) {
-				try {
-					this.read();
-					if (this.getCurrentState().getTurn().equals(StateTablut.Turn.BLACK)) {
-						long startTime = System.currentTimeMillis();
-						Action a = search.makeDecision(state);
-						long estimatedTime = System.currentTimeMillis() - startTime;
-						System.out.println("Played move: " + a.toString());
-						System.out.println("Time to find move: " + estimatedTime/1000.0 + " seconds");
-						this.write(action);
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.WHITE)) {
-						System.out.println("Waiting for your opponent move... ");
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.WHITEWIN)) {
-						System.out.println("YOU LOSE!");
-						System.exit(0);
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.BLACKWIN)) {
-						System.out.println("YOU WIN!");
-						System.exit(0);
-					} else if (this.getCurrentState().getTurn().equals(StateTablut.Turn.DRAW)) {
-						System.out.println("DRAW!");
-						System.exit(0);
+
+			// print current state
+			System.out.println("Current state:");
+			state = this.getCurrentState();
+			System.out.println(state.toString());
+
+
+
+			// if i'm WHITE
+			if (this.getPlayer().equals(State.Turn.WHITE)) {
+
+				// if is my turn (WHITE)
+				if (state.getTurn().equals(StateTablut.Turn.WHITE)) {
+
+					System.out.println("\nSearching a suitable move... ");
+
+					// search the best move in search tree
+					Action a = search.makeDecision(state);
+
+					System.out.println("\nAction selected: " + a.toString());
+					try {
+						this.write(a);
+					} catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.exit(1);
+
+				}
+
+				// if is turn of oppenent (BLACK)
+				else if (state.getTurn().equals(StateTablut.Turn.BLACK)) {
+					System.out.println("Waiting for your opponent move...\n");
+				}
+				// if I WIN
+				else if (state.getTurn().equals(StateTablut.Turn.WHITEWIN)) {
+					System.out.println("YOU WIN!");
+					System.exit(0);
+				}
+				// if I LOSE
+				else if (state.getTurn().equals(StateTablut.Turn.BLACKWIN)) {
+					System.out.println("YOU LOSE!");
+					System.exit(0);
+				}
+				// if DRAW
+				else if (state.getTurn().equals(StateTablut.Turn.DRAW)) {
+					System.out.println("DRAW!");
+					System.exit(0);
+				}
+
+			}
+			// if i'm BLACK
+			else {
+
+				// if is my turn (BLACK)
+				if (this.getCurrentState().getTurn().equals(StateTablut.Turn.BLACK)) {
+
+					System.out.println("\nSearching a suitable move... ");
+
+					// search the best move in search tree
+					Action a = search.makeDecision(state);
+
+					System.out.println("\nAction selected: " + a.toString());
+					try {
+						this.write(a);
+					} catch (ClassNotFoundException | IOException e) {
+						e.printStackTrace();
+					}
+
+				}
+
+				// if is turn of oppenent (WHITE)
+				else if (state.getTurn().equals(StateTablut.Turn.WHITE)) {
+					System.out.println("Waiting for your opponent move...\n");
+				}
+
+				// if I LOSE
+				else if (state.getTurn().equals(StateTablut.Turn.WHITEWIN)) {
+					System.out.println("YOU LOSE!");
+					System.exit(0);
+				}
+
+				// if I WIN
+				else if (state.getTurn().equals(StateTablut.Turn.BLACKWIN)) {
+					System.out.println("YOU WIN!");
+					System.exit(0);
+				}
+
+				// if DRAW
+				else if (state.getTurn().equals(StateTablut.Turn.DRAW)) {
+					System.out.println("DRAW!");
+					System.exit(0);
 				}
 			}
 		}
 	}
-
 }

@@ -798,7 +798,6 @@ public class GameAshtonTablut implements Game {
 			e.printStackTrace();
 		}
 
-
 		return possibleMoves;
 	}
 	private boolean moveIsValid(State state, Action action) {
