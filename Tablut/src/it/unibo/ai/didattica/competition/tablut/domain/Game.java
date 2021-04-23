@@ -17,7 +17,7 @@ import it.unibo.ai.didattica.competition.tablut.exceptions.ThroneException;
  * Contains the rules of the game
  *
  */
-public interface Game {
+public interface Game extends  aima.core.search.adversarial.Game<State,Action,State.Turn> {
 
 	/**
 	 * This method checks an action in a state: if it is correct the state is

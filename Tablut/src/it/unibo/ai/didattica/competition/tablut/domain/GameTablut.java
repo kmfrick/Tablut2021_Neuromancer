@@ -1,11 +1,18 @@
 package it.unibo.ai.didattica.competition.tablut.domain;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import it.unibo.ai.didattica.competition.tablut.solve.WhiteHeuristic;
+import it.unibo.ai.didattica.competition.tablut.solve.BlackHeuristic;
+
 
 import it.unibo.ai.didattica.competition.tablut.exceptions.*;
 
@@ -587,6 +594,118 @@ public class GameTablut implements Game {
 	@Override
 	public void endGame(State state) {
 		this.loggGame.fine("Stato: "+state.toString());
+	}
+
+	private List<Action> getMovesForColor(State state, State.Pawn color) throws IOException {
+		int drow[] = {1, 0, -1, 0};
+		int dcol[] = {0, 1, 0, -1};
+		var possibleMoves = new ArrayList<Action>();
+		int row = 0, col = -1;
+		for (int c = 0; c < state.getNumberOf(color); c++) {
+			do {
+				col++;
+				if (col == state.getBoard().length) { col = 0; row++; }
+				if (row >= state.getBoard().length) throw new ArrayIndexOutOfBoundsException();
+			} while (!state.getPawn(row, col).equalsPawn(color.toString()));
+			for (int i = 0; i < drow.length; i++) {
+				boolean lastMoveWasValid = true;
+				for (int distance = 1; lastMoveWasValid && posIsValid(state, row + drow[i] * distance, col + dcol[i] * distance); distance++) {
+					// (0, 0) = top left
+					String from = state.getBox(row, col);
+					String to = state.getBox(row + drow[i] * distance, col + dcol[i] * distance);
+					var curAction = new Action(from, to, state.getTurn());
+					if (moveIsValid(state, curAction)) {
+						possibleMoves.add(curAction);
+					} else {
+						lastMoveWasValid = false;
+					}
+				}
+			}
+		}
+		return possibleMoves;
+	}
+	public List<Action> getActions(State state) {
+
+		var possibleMoves = new ArrayList<Action>();
+
+		try {
+			if (state.getTurn() == State.Turn.WHITE) {
+				// Generate moves for White
+				possibleMoves.addAll(getMovesForColor(state, State.Pawn.WHITE));
+				// Generate moves for King
+				possibleMoves.addAll(getMovesForColor(state, State.Pawn.KING));
+			} else {
+				// Generate moves for Black
+				possibleMoves.addAll(getMovesForColor(state, State.Pawn.BLACK));
+			}
+		} catch (IOException e) {
+			System.out.println("[Neuromancer] IOException in getActions");
+			e.printStackTrace();
+		}
+
+
+		return possibleMoves;
+	}
+	private boolean moveIsValid(State state, Action action) {
+		try {
+			State curState = state.clone();
+			State newState = this.checkMove(curState, action);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	public double getUtility(State state, State.Turn player) {
+		if(player==State.Turn.WHITE) {
+			if( state.getTurn().equals(State.Turn.BLACKWIN))
+				return Double.NEGATIVE_INFINITY;
+			if( state.getTurn().equals(State.Turn.WHITEWIN))
+				return Double.POSITIVE_INFINITY;
+			return WhiteHeuristic.eval(state);
+		}else {
+			if( state.getTurn().equals(State.Turn.BLACKWIN))
+				return Double.POSITIVE_INFINITY;
+			if( state.getTurn().equals(State.Turn.WHITEWIN))
+				return Double.NEGATIVE_INFINITY;
+			return BlackHeuristic.eval(state);
+		}
+
+	}
+
+	private boolean posIsValid(State state, int row, int col) {
+		if (row < 0 || row >= state.getBoard().length) return false;
+		if (col < 0 || col >= state.getBoard().length) return false;
+		return true;
+	}
+	public boolean isTerminal(State state) {
+		if (state.getTurn().equals(State.Turn.WHITEWIN) || state.getTurn().equals(State.Turn.BLACKWIN) || state.getTurn().equals(State.Turn.DRAW)) {
+			return true;
+		}
+		return false;
+	}
+	public State getResult(State state, Action action) {
+
+		// move pawn
+		State newstate = this.movePawn(state.clone(), action);
+		// check the state for any capture
+		if (newstate.getTurn().equalsTurn("W")) {
+			newstate = this.checkCaptureBlack(newstate, action);
+		} else if (newstate.getTurn().equalsTurn("B")) {
+			newstate = this.checkCaptureWhite(newstate, action);
+		}
+		return newstate;
+	}
+
+	public State.Turn getPlayer(State state) {
+		return state.getTurn();
+	}
+
+	public State.Turn[] getPlayers() {
+		return State.Turn.values();
+	}
+
+	public State getInitialState() {
+		return new StateTablut();
 	}
 
 	

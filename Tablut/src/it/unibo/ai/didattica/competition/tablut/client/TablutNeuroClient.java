@@ -79,7 +79,8 @@ public class TablutNeuroClient extends TablutClient {
 				System.out.println("Error in game selection");
 				System.exit(4);
 		}
-
+		
+		search = new TablutMinimax(rules);
 
 
 		if (this.getPlayer() == State.Turn.WHITE) {
