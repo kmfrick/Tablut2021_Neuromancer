@@ -129,36 +129,36 @@ public class GameAshtonTablut implements Game {
 		if (columnFrom > state.getBoard().length - 1 || rowFrom > state.getBoard().length - 1
 				|| rowTo > state.getBoard().length - 1 || columnTo > state.getBoard().length - 1 || columnFrom < 0
 				|| rowFrom < 0 || rowTo < 0 || columnTo < 0) {
-			this.loggGame.warning("Mossa fuori tabellone");
+			//this.loggGame.warning("Mossa fuori tabellone");
 			throw new BoardException(a);
 		}
 
 		// controllo che non vada sul trono
 		if (state.getPawn(rowTo, columnTo).equalsPawn(State.Pawn.THRONE.toString())) {
-			this.loggGame.warning("Mossa sul trono");
+			//this.loggGame.warning("Mossa sul trono");
 			throw new ThroneException(a);
 		}
 
 		// controllo la casella di arrivo
 		if (!state.getPawn(rowTo, columnTo).equalsPawn(State.Pawn.EMPTY.toString())) {
-			this.loggGame.warning("Mossa sopra una casella occupata");
+			//this.loggGame.warning("Mossa sopra una casella occupata");
 			throw new OccupitedException(a);
 		}
 		if (this.citadels.contains(state.getBox(rowTo, columnTo))
 				&& !this.citadels.contains(state.getBox(rowFrom, columnFrom))) {
-			this.loggGame.warning("Mossa che arriva sopra una citadel");
+			//this.loggGame.warning("Mossa che arriva sopra una citadel");
 			throw new CitadelException(a);
 		}
 		if (this.citadels.contains(state.getBox(rowTo, columnTo))
 				&& this.citadels.contains(state.getBox(rowFrom, columnFrom))) {
 			if (rowFrom == rowTo) {
 				if (columnFrom - columnTo > 5 || columnFrom - columnTo < -5) {
-					this.loggGame.warning("Mossa che arriva sopra una citadel");
+					//this.loggGame.warning("Mossa che arriva sopra una citadel");
 					throw new CitadelException(a);
 				}
 			} else {
 				if (rowFrom - rowTo > 5 || rowFrom - rowTo < -5) {
-					this.loggGame.warning("Mossa che arriva sopra una citadel");
+					//this.loggGame.warning("Mossa che arriva sopra una citadel");
 					throw new CitadelException(a);
 				}
 			}
@@ -286,8 +286,8 @@ public class GameAshtonTablut implements Game {
 		// controllo pareggio
 		int trovati = 0;
 		for (State s : drawConditions) {
-
-			System.out.println(s.toString());
+			
+			//System.out.println(s.toString());
 
 			if (s.equals(state)) {
 				// DEBUG: //
@@ -320,8 +320,8 @@ public class GameAshtonTablut implements Game {
 
 		this.loggGame.fine("Current draw cache size: " + this.drawConditions.size());
 
-		this.loggGame.fine("Stato:\n" + state.toString());
-		System.out.println("Stato:\n" + state.toString());
+		//this.loggGame.fine("Stato:\n" + state.toString());
+		//System.out.println("Stato:\n" + state.toString());
 
 		return state;
 	}
@@ -505,7 +505,7 @@ public class GameAshtonTablut implements Game {
 		// ho il re sotto
 		if (a.getRowTo() < state.getBoard().length - 2
 				&& state.getPawn(a.getRowTo() + 1, a.getColumnTo()).equalsPawn("K")) {
-			System.out.println("Ho il re sotto");
+			//System.out.println("Ho il re sotto");
 			// re sul trono
 			if (state.getBox(a.getRowTo() + 1, a.getColumnTo()).equals("e5")) {
 				if (state.getPawn(5, 4).equalsPawn("B") && state.getPawn(4, 5).equalsPawn("B")
@@ -779,18 +779,23 @@ public class GameAshtonTablut implements Game {
 		}
 		return possibleMoves;
 	}
-	public List<Action> getActions(State state) throws IOException {
+	public List<Action> getActions(State state) {
 
 		var possibleMoves = new ArrayList<Action>();
-
-		if (state.getTurn() == State.Turn.WHITE) {
-			// Generate moves for White
-			possibleMoves.addAll(getMovesForColor(state, State.Pawn.WHITE));
-			// Generate moves for King
-			possibleMoves.addAll(getMovesForColor(state, State.Pawn.KING));
-		} else {
-			// Generate moves for Black
-			possibleMoves.addAll(getMovesForColor(state, State.Pawn.BLACK));
+		
+		try {
+			if (state.getTurn() == State.Turn.WHITE) {
+				// Generate moves for White
+				possibleMoves.addAll(getMovesForColor(state, State.Pawn.WHITE));
+				// Generate moves for King
+				possibleMoves.addAll(getMovesForColor(state, State.Pawn.KING));
+			} else {
+				// Generate moves for Black
+				possibleMoves.addAll(getMovesForColor(state, State.Pawn.BLACK));
+			}
+		} catch (IOException e) {
+			System.out.println("[Neuromancer] IOException in getActions");
+			e.printStackTrace();
 		}
 
 		return possibleMoves;
@@ -843,5 +848,17 @@ public class GameAshtonTablut implements Game {
 			newstate = this.checkCaptureWhite(newstate, action);
 		}
 		return newstate;
+	}
+
+	public State.Turn getPlayer(State state) {
+		return state.getTurn();
+	}
+
+	public State.Turn[] getPlayers() {
+		return State.Turn.values();
+	}
+
+	public State getInitialState() {
+		return new StateTablut();
 	}
 }

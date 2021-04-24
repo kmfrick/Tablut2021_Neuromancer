@@ -10,7 +10,7 @@ import java.security.InvalidParameterException;
  * @author A.Piretti
  * 
  */
-public class Action implements Serializable {
+public class Action implements Serializable, aima.core.agent.Action  {
 
 	private static final long serialVersionUID = 1L;
 

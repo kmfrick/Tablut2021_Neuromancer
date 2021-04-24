@@ -169,7 +169,7 @@ public class WhiteHeuristic {
 
 		for (int r = 0; r < state.getBoard().length && kingRow < 0; r++) {
 			for (int c = 0; c < state.getBoard().length && kingCol < 0; c++) {
-				if (state.getPawn(r, c).equalsPawn(State.Pawn.KING)) {
+				if (state.getPawn(r, c).equalsPawn(State.Pawn.KING.toString())) {
 					kingRow = r;
 					kingCol = c;
 				}
@@ -200,8 +200,6 @@ public class WhiteHeuristic {
 	public static double eval(State state, Coord newCord/*, int depth*/){
 		double result = 0.0;
 		Coord kingPos = state.getKingPos();
-
-		// other computations for other weights
 
 		result = weightVictory * winWithAMove(state, kingPos)                        +
 				 weightKingPosition * getKingScore(state)		                     +
