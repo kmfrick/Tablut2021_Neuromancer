@@ -4,12 +4,18 @@ import it.unibo.ai.didattica.competition.tablut.domain.Coord;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 
 public class WhiteHeuristic {
-	double weightPieces = 1.0; // Number of white pieces on the board
-	double weightRhombus = 1.0; // Avoid rhombus being blocked
-	double weightKingDistance = 1.0; // Distance from the King
-	double weightKingExit = 1.0; // How far the King is from the closest exit
-	double weightKingThreat = -1.0; // How threatening is a Black piece for the King
-	double weightScatter = 1.0; // Try not to move pieces that have just been moved
+
+	//new weights
+	double weightVictory = 5000;
+	double weightKingPosition = 200;
+	double weightDistanceFromCentre = 190;
+	double weightNumberOfWhites = 170;
+	double weightSurroundingBlackPawn = -100;
+	double weightNumberOfBlacks = -170;
+	double weightThreat = -190;
+
+
+
 	static int[][] kingScoreM = new int[9][9];
 	static {
 		for (int i = 0; i < 9; i++) {
@@ -58,20 +64,20 @@ public class WhiteHeuristic {
 		return result;
 	}
 
-	// metodo che valuta se l'avversario può mangiare il pezzo appena mosso con una
+	// metodo che valuta se l'avversario puÃ² mangiare il pezzo appena mosso con una
 	// sola mossa successiva
 	// newCoord = nuova coordinata del pezzo mosso
 	private static int threat(State state, Coord newCoord) {
 		int result = 0;
 		// State.Pawn pawnColumnBotton, pawnColumnUp, pawnRowRight, pawnRowLeft;
-		if (state.getPawn(newCoord.getRow(), newCoord.getColumn()) == State.Pawn.WHITE) { // il pezzo mosso è bianco
+		if (state.getPawn(newCoord.getRow(), newCoord.getColumn()) == State.Pawn.WHITE) { // il pezzo mosso Ã¨ bianco
 			/*
 			 * pawnColumnBotton = state.getPawn(newCoord.getRow() + 1,
 			 * newCoord.getColumn()); pawnColumnUp = state.getPawn(newCoord.getRow() + -1,
 			 * newCoord.getColumn()); pawnRowRight = state.getPawn(newCoord.getRow(),
 			 * newCoord.getColumn() + 1); pawnRowLeft = state.getPawn(newCoord.getRow(),
 			 * newCoord.getColumn() - 1); if(pawnColumnBotton == State.Pawn.BLACK){
-			 * //controllo se nella stessa colonna e di una riga in basso c'è adiacente un
+			 * //controllo se nella stessa colonna e di una riga in basso c'Ã¨ adiacente un
 			 * pezzo nero //TODO: implementare il controllo, a questo punto, di tutta la
 			 * colonna State.Pawn pawnUp = state.checkUp(newCoord); if(pawnUp ==
 			 * State.Pawn.BLACK) return 1; //TODO: per ogni casella sopra fare checkRight e
@@ -93,12 +99,12 @@ public class WhiteHeuristic {
 				if (newCoord.getColumn() + v >= 0 && newCoord.getColumn() + v <= 8) {
 					if (state.getPawn(newCoord.getColumn() + v, newCoord.getRow()) == opponent) {
 						/*
-						 * Non sar� mai i<0 && i>0, uno dei due termini dell'or restituisce sempre F.
+						 * Non sarà mai i<0 && i>0, uno dei due termini dell'or restituisce sempre F.
 						 * Per non implementare quattro controlli diversi ho riassunto in questi due or
 						 */
 						if ((v < 0 && state.checkRight(newCoord) == opponent)
 								|| (v > 0 && state.checkLeft(newCoord) == opponent)) {
-							// non so che valore dare: per ora segno 100 per dire che � grande
+							// non so che valore dare: per ora segno 100 per dire che è grande
 							result += 100;
 						}
 						Coord neighborColumn = new Coord(newCoord.getColumn() - v, newCoord.getRow());
@@ -110,7 +116,7 @@ public class WhiteHeuristic {
 					if (state.getPawn(newCoord.getColumn(), newCoord.getRow() + v) == opponent) {
 						if ((v < 0 && (state.checkRight(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
 							|| (v > 0 && (state.checkLeft(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))) {
-							// non so che valore dare: per ora aumento di 100 per dire che � pericoloso
+							// non so che valore dare: per ora aumento di 100 per dire che è pericoloso
 							result += 100;
 						}
 					}
@@ -152,9 +158,7 @@ public class WhiteHeuristic {
 		return state.getNumberOf(State.Pawn.BLACK);
 	}
 
-	private static int numberOfWhitePawn(State state) {
-		return state.getNumberOf(State.Pawn.WHITE);
-	}
+
 
 	private static double calculateKingDistance(State state, State.Pawn color) {
 		double kingDistance = 0;
@@ -192,28 +196,22 @@ public class WhiteHeuristic {
 		Coord kingCoor = state.getKingPos();
 		return kingScoreM[kingCoor.getRow()][kingCoor.getColumn()];
 	}
-	/*
-	 * public static double calculateHeuristic(State state) { double h = 0;
-	 * 
-	 * int pieces = state.getNumberOf(State.Pawn.WHITE); double rhombus =
-	 * calculateRhombusVal(state); double kingExit = calculateKingExit(state);
-	 * double kingDistance = calculateKingDistance(state, State.Pawn.WHITE); double
-	 * kingThreat = calculateKingThreat(state, State.Pawn.BLACK); double scatter =
-	 * calculateScatter(state);
-	 * 
-	 * h += weightPieces * pieces; h += weightRhombus * rhombus; h += weightKingExit
-	 * * kingExit; h += weightKingDistance * kingDistance; h += weightKingThreat *
-	 * kingThreat; h += weightScatter * scatter;
-	 * 
-	 * return h; }
-	 */
 
-	public static double eval(State state/* , int depth */) {
+	public static double eval(State state, Coord newCord/*, int depth*/){
 		double result = 0.0;
 		Coord kingPos = state.getKingPos();
+
 		// other computations for other weights
 
-		result += calculateKingCentreDistance(kingPos);
+		result = weightVictory * winWithAMove(state, kingPos)                        +
+				 weightKingPosition * getKingScore(state)		                     +
+				 weightDistanceFromCentre * calculateKingCentreDistance(kingPos)     +
+				 weightNumberOfWhites * numberOfWhitePawn(state)                     +
+				 weightSurroundingBlackPawn * calculateSurroundingBlackPawn(kingPos) +
+				 weightThreat * threat(state, newCord)								 +
+
+
+		return result;
 
 	}
 
