@@ -269,6 +269,7 @@ public class GameAshtonTablut implements Game {
 
 		// se sono arrivato qui, muovo la pedina
 		state = this.movePawn(state, a);
+		state.setNewCoord(new Coord(a.getRowTo(), a.getColumnTo()));
 
 		// a questo punto controllo lo stato per eventuali catture
 		if (state.getTurn().equalsTurn("W")) {
