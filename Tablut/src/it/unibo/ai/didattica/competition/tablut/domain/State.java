@@ -18,6 +18,17 @@ public abstract class State {
 	 * 
 	 * @author A.Piretti
 	 */
+
+	private Coord newCoord;
+
+	public void setNewCoord(Coord coord) {
+		newCoord = coord;
+	}
+
+	public Coord getNewCoord() {
+		return newCoord;
+	}
+
 	public enum Turn {
 		WHITE("W"), BLACK("B"), WHITEWIN("WW"), BLACKWIN("BW"), DRAW("D");
 		private final String turn;
