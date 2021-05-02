@@ -1,6 +1,7 @@
 package it.unibo.ai.didattica.competition.tablut.solve;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
+import it.unibo.ai.didattica.competition.tablut.domain.Coord;
 
 class Side {//inizio dei lati del rombo
 	 private int innerRow;
@@ -29,9 +30,13 @@ class Side {//inizio dei lati del rombo
 	 
 }
 
-public class BlackHeuristic {
+public class BlackHeuristic extends Heuristic {
+
+	private static final float weightRhombus = 100;
+	private static final float weightRowColCover = 100;
+
 	
-	static  private  double calculateRhombusVal (State state) {
+	static  private  double calculateRhombus (State state) {
 		Side sides[] = new Side[3];
 		sides[0]=new Side(3, 2, 2, 1);// up sx
 		sides[1]=new Side(6, 5, 7, 6);//down dx
@@ -73,7 +78,7 @@ public class BlackHeuristic {
 		 }
 		return points/tot;
 	}
-	static  private  double calculateRowColCover (State state) {//numero di collenne e righe coperte
+	static  private  double calculateRowColCover (State state) {//numero di colonne e righe coperte
 		int points=0, j;
 		double tot=18;
 		for(int i=0; i<9; i++) {
@@ -88,8 +93,30 @@ public class BlackHeuristic {
 		}
 		return points/tot;
 	}
+
 	public static double eval(State state) {
-		return 0;
+		double result = 0.0;
+		var newCoord = state.getNewCoord();
+    if (newCoord == null) {
+      System.err.println("[Neuromancer] newCoord = null :(");
+      throw new NullPointerException();
+    }
+    Coord kingPos = state.getKingPos();
+
+    result = weightVictory * winWithAMove(state, kingPos) +
+         weightKingPosition * getKingScore(state) +
+         weightDistanceFromCentre * calculateKingCentreDistance(kingPos) +
+         weightSurroundingBlackPawn * calculateSurroundingBlackPawn(state, kingPos) +
+         weightNumberOfBlacks * numberOfBlackPawn(state) +
+         weightNumberOfWhites * numberOfWhitePawn(state) +
+         weightThreat * threat(state, newCoord) +
+				 weightRhombus * calculateRhombus(state) + 
+				 weightScatter * calculateScatter(state) + 
+				 weightRowColCover * calculateRowColCover(state);
+
+
+    return result;
+
 	}
 
 }
