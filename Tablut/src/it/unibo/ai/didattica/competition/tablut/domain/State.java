@@ -2,6 +2,8 @@ package it.unibo.ai.didattica.competition.tablut.domain;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 /**
  * Abstract class for a State of a game We have a representation of the board
@@ -19,15 +21,47 @@ public abstract class State {
 	 * @author A.Piretti
 	 */
 
-	private Coord newCoord;
+
+	private final int queueSize = 10;
+
+	private Coord moveStartCoord;
+	private Coord moveEndCoord;
+
+	public void setMoveStartCoord(Coord coord) {
+		moveStartCoord = coord;
+	}
+
+	public Coord getMoveStartCoord() {
+		return moveStartCoord;
+	}
 
 	public void setNewCoord(Coord coord) {
-		newCoord = coord;
+		moveEndCoord = coord;
 	}
 
 	public Coord getNewCoord() {
-		return newCoord;
+		return moveEndCoord;
 	}
+
+	private Deque<Coord> moves;
+
+	public void addMove(Coord coord) {
+		moves.addLast(coord);
+		if (moves.size() > queueSize) {
+			moves.removeFirst();
+		}
+
+	}
+
+	public boolean moveIsRecent(Coord coord) {
+		for (var m : moves) {
+			if (m == coord) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	public enum Turn {
 		WHITE("W"), BLACK("B"), WHITEWIN("WW"), BLACKWIN("BW"), DRAW("D");
@@ -54,7 +88,7 @@ public abstract class State {
 	 *
 	 */
 	public enum Pawn {
-		EMPTY("O"), WHITE("W"), BLACK("B"), THRONE("T"), KING("K");
+		EMPTY("."), WHITE("W"), BLACK("B"), THRONE("T"), KING("K");
 		private final String pawn;
 
 		private Pawn(String s) {
@@ -76,6 +110,7 @@ public abstract class State {
 
 	public State() {
 		super();
+		moves = new ArrayDeque<Coord>();
 	}
 
 	public Pawn[][] getBoard() {
