@@ -77,28 +77,28 @@ public abstract class Heuristic {
 		} else {
 			opponent = State.Pawn.WHITE;
 		}
-			/*
-			 * pawnColumnBotton = state.getPawn(newCoord.getRow() + 1,
-			 * newCoord.getColumn()); pawnColumnUp = state.getPawn(newCoord.getRow() + -1,
-			 * newCoord.getColumn()); pawnRowRight = state.getPawn(newCoord.getRow(),
-			 * newCoord.getColumn() + 1); pawnRowLeft = state.getPawn(newCoord.getRow(),
-			 * newCoord.getColumn() - 1); if(pawnColumnBotton == State.Pawn.BLACK){
-			 * //controllo se nella stessa colonna e di una riga in basso c'Ã¨ adiacente un
-			 * pezzo nero //TODO: implementare il controllo, a questo punto, di tutta la
-			 * colonna State.Pawn pawnUp = state.checkUp(newCoord); if(pawnUp ==
-			 * State.Pawn.BLACK) return 1; //TODO: per ogni casella sopra fare checkRight e
-			 * checkLeft int column = newCoord.getColumn(); //... }
-			 */
+		/*
+		 * pawnColumnBotton = state.getPawn(newCoord.getRow() + 1,
+		 * newCoord.getColumn()); pawnColumnUp = state.getPawn(newCoord.getRow() + -1,
+		 * newCoord.getColumn()); pawnRowRight = state.getPawn(newCoord.getRow(),
+		 * newCoord.getColumn() + 1); pawnRowLeft = state.getPawn(newCoord.getRow(),
+		 * newCoord.getColumn() - 1); if(pawnColumnBotton == State.Pawn.BLACK){
+		 * //controllo se nella stessa colonna e di una riga in basso c'Ã¨ adiacente un
+		 * pezzo nero //TODO: implementare il controllo, a questo punto, di tutta la
+		 * colonna State.Pawn pawnUp = state.checkUp(newCoord); if(pawnUp ==
+		 * State.Pawn.BLACK) return 1; //TODO: per ogni casella sopra fare checkRight e
+		 * checkLeft int column = newCoord.getColumn(); //... }
+		 */
 
-			/*
-			 * Controllo se, muovendomi in una nuova posizione, ho al fianco un qualsiasi
-			 * pedone del colore opposto.
-			 * 
-			 * Logica: definisco un opponent e due versori. Per ogni iterazione sui versori:
-			 * prima controllo che non ci siano opponents a sinistra o a destra sulla stessa
-			 * riga, poi controllo che non ci siano opponents sopra o sotto sulla stessa
-			 * colonna.
-			 */
+		/*
+		 * Controllo se, muovendomi in una nuova posizione, ho al fianco un qualsiasi
+		 * pedone del colore opposto.
+		 * 
+		 * Logica: definisco un opponent e due versori. Per ogni iterazione sui versori:
+		 * prima controllo che non ci siano opponents a sinistra o a destra sulla stessa
+		 * riga, poi controllo che non ci siano opponents sopra o sotto sulla stessa
+		 * colonna.
+		 */
 		int[] versors = { -1, 1 };
 		for (int v : versors) {
 			if (newCoord.getColumn() + v >= 0 && newCoord.getColumn() + v <= 8) {
@@ -119,10 +119,10 @@ public abstract class Heuristic {
 			}
 			if (newCoord.getRow() + v >= 0 && newCoord.getRow() + v <= 8) {
 				if (state.getPawn(newCoord.getColumn(), newCoord.getRow() + v) == opponent) {
-					if ((v < 0 && (state.checkRight(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
-					if ((v < 0 && (state.checkLeft(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
-						|| (v > 0 && (state.checkLeft(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))) {
-						|| (v > 0 && (state.checkRight(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))) {
+					if ((v < 0 && (state.checkRight(newCoord) == opponent || state.checkBottom(newCoord) == opponent)) ||
+							((v < 0 && (state.checkLeft(newCoord) == opponent || state.checkBottom(newCoord) == opponent)) ||
+							 (v > 0 && (state.checkLeft(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))) ||
+							(v > 0 && (state.checkRight(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))) {
 						// non so che valore dare: per ora aumento di 1 per dire che è pericoloso
 						result += 1;
 					}
