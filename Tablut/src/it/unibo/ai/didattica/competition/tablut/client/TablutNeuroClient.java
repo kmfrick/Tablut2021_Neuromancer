@@ -150,6 +150,7 @@ public class TablutNeuroClient extends TablutClient {
 					System.out.println("\nSearching a suitable move... ");
 
 					// search the best move in search tree
+					
 					Action a = search.makeDecision(state);
 
 					System.out.println("\nAction selected: " + a.toString());

@@ -23,4 +23,13 @@ public class TablutMinimax extends IterativeDeepeningAlphaBetaSearch<State, Acti
 		System.out.println("[Neuromancer] makeDecision() went " + getMetrics().get(METRICS_MAX_DEPTH) + " levels deep");
 		return ret;
 	}
+	@Override
+	protected double eval(State state, State.Turn player) {
+       if (game.isTerminal(state)) {
+           return game.getUtility(state, player);
+         } else {
+        	 super.eval(state, player);
+             return game.getUtility(state, player);
+         }
+	}
 }

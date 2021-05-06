@@ -32,16 +32,22 @@ class Side {//inizio dei lati del rombo
 
 public class BlackHeuristic extends Heuristic {
 
-	private static final float weightRhombus = 100;
-	private static final float weightRowColCover = 100;
-
-	
-	static  private  double calculateRhombus (State state) {
-		Side sides[] = new Side[3];
+	private static double weightRhombus = 600;
+	private static double weightRowColCover = 450;
+	static double weightVictory = -5000;
+	static double weightNumberOfWhites = -170;
+	static double weightSurroundingBlackPawn = +100;
+	static double weightNumberOfBlacks = 170;
+	static double weightThreat = -190;
+	static double weightScatter = 100;
+	static Side sides[] = new Side[4];
+	static {
 		sides[0]=new Side(3, 2, 2, 1);// up sx
 		sides[1]=new Side(6, 5, 7, 6);//down dx
 		sides[2]=new Side(2,5, 1, 6);//up dx
 		sides[3]=new Side(5,2 ,6, 1);//down sx
+	}
+	static  private  double calculateRhombus (State state) {
 		Double tot=12.0; // normalizzare
 		
 		int col, row;
@@ -96,20 +102,18 @@ public class BlackHeuristic extends Heuristic {
 
 	public static double eval(State state) {
 		double result = 0.0;
-		var newCoord = state.getNewCoord();
+/*var newCoord = state.getNewCoord();
     if (newCoord == null) {
       System.err.println("[Neuromancer] newCoord = null :(");
       throw new NullPointerException();
-    }
+    }*/
     Coord kingPos = state.getKingPos();
 
     result = weightVictory * winWithAMove(state, kingPos) +
-         weightKingPosition * getKingScore(state) +
-         weightDistanceFromCentre * calculateKingCentreDistance(kingPos) +
          weightSurroundingBlackPawn * calculateSurroundingBlackPawn(state, kingPos) +
          weightNumberOfBlacks * numberOfBlackPawn(state) +
          weightNumberOfWhites * numberOfWhitePawn(state) +
-         weightThreat * threat(state, newCoord) +
+         //weightThreat * threat(state, newCoord) +
 				 weightRhombus * calculateRhombus(state) + 
 				 weightScatter * calculateScatter(state) + 
 				 weightRowColCover * calculateRowColCover(state);

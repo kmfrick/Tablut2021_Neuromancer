@@ -18,6 +18,7 @@ public abstract class Heuristic {
 
 
 	static int[][] kingScoreM = new int[9][9];
+	static boolean[][] citadels=new boolean [9][9];
 	static {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -38,6 +39,32 @@ public abstract class Heuristic {
 		kingScoreM[3][7] = 1;
 		kingScoreM[5][1] = 1;
 		kingScoreM[5][7] = 1;
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				citadels[i][j]=false;
+			}
+		}
+		citadels[0][3]=true;
+		citadels[0][4]=true;
+		citadels[0][5]=true;
+		citadels[1][4]=true;
+		
+		citadels[3][0]=true;
+		citadels[4][0]=true;
+		citadels[5][0]=true;
+		citadels[4][1]=true;
+		
+		citadels[8][3]=true;
+		citadels[8][4]=true;
+		citadels[8][5]=true;
+		citadels[7][4]=true;
+		
+		citadels[3][8]=true;
+		citadels[4][8]=true;
+		citadels[5][8]=true;
+		citadels[4][7]=true;
+		
+		citadels[4][4]=true;//castle
 	}
 
 	protected static double calculateKingCentreDistance(Coord kingPos) {
@@ -50,17 +77,19 @@ public abstract class Heuristic {
 	protected static int calculateSurroundingBlackPawn(State state, Coord kingPos) {
 		int result = 0;
 		State.Pawn pawn = state.getPawn(kingPos.getRow() + 1, kingPos.getColumn());
-		if (pawn == State.Pawn.BLACK)
+		if (pawn == State.Pawn.BLACK || isCitadel(kingPos.getRow()+1, kingPos.getColumn()))
 			result++;
 		pawn = state.getPawn(kingPos.getRow() - 1, kingPos.getColumn());
-		if (pawn == State.Pawn.BLACK)
+		if (pawn == State.Pawn.BLACK || isCitadel(kingPos.getRow()-1 , kingPos.getColumn()))
 			result++;
 		pawn = state.getPawn(kingPos.getRow(), kingPos.getColumn() + 1);
-		if (pawn == State.Pawn.BLACK)
+		if (pawn == State.Pawn.BLACK || isCitadel(kingPos.getRow(), kingPos.getColumn() + 1))
 			result++;
 		pawn = state.getPawn(kingPos.getRow(), kingPos.getColumn() - 1);
-		if (pawn == State.Pawn.BLACK)
+		if (pawn == State.Pawn.BLACK || isCitadel(kingPos.getRow(), kingPos.getColumn() - 1))
 			result++;
+		if(calculateKingCentreDistance(kingPos)>=2)
+			result*=2;
 		// TODO: considerare il trono come casella "speciale", ovvero la casella (4,4)
 		return result;
 	}
@@ -117,7 +146,7 @@ public abstract class Heuristic {
 						result += 1;
 				}
 			}
-			if (newCoord.getRow() + v >= 0 && newCoord.getRow() + v <= 8) {
+			/*if (newCoord.getRow() + v >= 0 && newCoord.getRow() + v <= 8) {
 				if (state.getPawn(newCoord.getColumn(), newCoord.getRow() + v) == opponent) {
 					if ((v < 0 && (state.checkRight(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
 					if ((v < 0 && (state.checkLeft(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
@@ -127,7 +156,7 @@ public abstract class Heuristic {
 						result += 1;
 					}
 				}
-			}
+			}*/
 		}
 		return result;
 	}
@@ -204,10 +233,13 @@ public abstract class Heuristic {
 		return 0;
 	}
 
-	protected static double getKingScore(State state) {
+	
+	/*protected static double getKingScore(State state) {
 		Coord kingCoor = state.getKingPos();
 		return kingScoreM[kingCoor.getRow()][kingCoor.getColumn()];
+	}*/
+	protected static boolean isCitadel(int row, int col) {//castle  too
+		return citadels[row][col];
 	}
-
-
+	
 }
