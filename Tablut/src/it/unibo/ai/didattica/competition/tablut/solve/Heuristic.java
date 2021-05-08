@@ -3,9 +3,14 @@ package it.unibo.ai.didattica.competition.tablut.solve;
 import it.unibo.ai.didattica.competition.tablut.domain.Coord;
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.util.Scanner; // Import the Scanner class to read text files
+
 public abstract class Heuristic {
 
 	//new weights
+	/*
 	static double weightVictory = 5000;
 	static double weightKingPosition = 200;
 	static double weightDistanceFromCentre = 250;
@@ -14,6 +19,7 @@ public abstract class Heuristic {
 	static double weightNumberOfBlacks = -170;
 	static double weightThreat = -190;
 	static double weightScatter = 100;
+	 */
 
 
 
@@ -48,22 +54,22 @@ public abstract class Heuristic {
 		citadels[0][4]=true;
 		citadels[0][5]=true;
 		citadels[1][4]=true;
-		
+
 		citadels[3][0]=true;
 		citadels[4][0]=true;
 		citadels[5][0]=true;
 		citadels[4][1]=true;
-		
+
 		citadels[8][3]=true;
 		citadels[8][4]=true;
 		citadels[8][5]=true;
 		citadels[7][4]=true;
-		
+
 		citadels[3][8]=true;
 		citadels[4][8]=true;
 		citadels[5][8]=true;
 		citadels[4][7]=true;
-		
+
 		citadels[4][4]=true;//castle
 	}
 
@@ -106,28 +112,28 @@ public abstract class Heuristic {
 		} else {
 			opponent = State.Pawn.WHITE;
 		}
-			/*
-			 * pawnColumnBotton = state.getPawn(newCoord.getRow() + 1,
-			 * newCoord.getColumn()); pawnColumnUp = state.getPawn(newCoord.getRow() + -1,
-			 * newCoord.getColumn()); pawnRowRight = state.getPawn(newCoord.getRow(),
-			 * newCoord.getColumn() + 1); pawnRowLeft = state.getPawn(newCoord.getRow(),
-			 * newCoord.getColumn() - 1); if(pawnColumnBotton == State.Pawn.BLACK){
-			 * //controllo se nella stessa colonna e di una riga in basso c'Ã¨ adiacente un
-			 * pezzo nero //TODO: implementare il controllo, a questo punto, di tutta la
-			 * colonna State.Pawn pawnUp = state.checkUp(newCoord); if(pawnUp ==
-			 * State.Pawn.BLACK) return 1; //TODO: per ogni casella sopra fare checkRight e
-			 * checkLeft int column = newCoord.getColumn(); //... }
-			 */
+		/*
+		 * pawnColumnBotton = state.getPawn(newCoord.getRow() + 1,
+		 * newCoord.getColumn()); pawnColumnUp = state.getPawn(newCoord.getRow() + -1,
+		 * newCoord.getColumn()); pawnRowRight = state.getPawn(newCoord.getRow(),
+		 * newCoord.getColumn() + 1); pawnRowLeft = state.getPawn(newCoord.getRow(),
+		 * newCoord.getColumn() - 1); if(pawnColumnBotton == State.Pawn.BLACK){
+		 * //controllo se nella stessa colonna e di una riga in basso c'Ã¨ adiacente un
+		 * pezzo nero //TODO: implementare il controllo, a questo punto, di tutta la
+		 * colonna State.Pawn pawnUp = state.checkUp(newCoord); if(pawnUp ==
+		 * State.Pawn.BLACK) return 1; //TODO: per ogni casella sopra fare checkRight e
+		 * checkLeft int column = newCoord.getColumn(); //... }
+		 */
 
-			/*
-			 * Controllo se, muovendomi in una nuova posizione, ho al fianco un qualsiasi
-			 * pedone del colore opposto.
-			 * 
-			 * Logica: definisco un opponent e due versori. Per ogni iterazione sui versori:
-			 * prima controllo che non ci siano opponents a sinistra o a destra sulla stessa
-			 * riga, poi controllo che non ci siano opponents sopra o sotto sulla stessa
-			 * colonna.
-			 */
+		/*
+		 * Controllo se, muovendomi in una nuova posizione, ho al fianco un qualsiasi
+		 * pedone del colore opposto.
+		 *
+		 * Logica: definisco un opponent e due versori. Per ogni iterazione sui versori:
+		 * prima controllo che non ci siano opponents a sinistra o a destra sulla stessa
+		 * riga, poi controllo che non ci siano opponents sopra o sotto sulla stessa
+		 * colonna.
+		 */
 		int[] versors = { -1, 1 };
 		for (int v : versors) {
 			if (newCoord.getColumn() + v >= 0 && newCoord.getColumn() + v <= 8) {
@@ -174,7 +180,7 @@ public abstract class Heuristic {
 			} else
 				return 0;
 		} else { // turno del nero (?)
-			if (state.checkRight(kingCoord) == State.Pawn.EMPTY)
+			/*if (state.checkRight(kingCoord) == State.Pawn.EMPTY)
 				count++;
 			if (state.checkLeft(kingCoord) == State.Pawn.EMPTY)
 				count++;
@@ -184,8 +190,8 @@ public abstract class Heuristic {
 				count++;
 			if (count > 1)
 				return 1;
-			else
-				return 0;
+			else*/
+			return 0;
 		}
 	}
 
@@ -233,13 +239,29 @@ public abstract class Heuristic {
 		return 0;
 	}
 
-	
+
 	/*protected static double getKingScore(State state) {
 		Coord kingCoor = state.getKingPos();
 		return kingScoreM[kingCoor.getRow()][kingCoor.getColumn()];
 	}*/
 	protected static boolean isCitadel(int row, int col) {//castle  too
 		return citadels[row][col];
+	}
+
+	public static void setWeightsAfterGenetic(){
+		try {
+			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				System.out.println("LETTA RIGA: " + data);
+				System.out.println(data);
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
 	}
 	
 }

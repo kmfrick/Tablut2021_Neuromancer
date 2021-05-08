@@ -4,10 +4,10 @@ import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.Coord;
 
 class Side {//inizio dei lati del rombo
-	 private int innerRow;
-	 private int innerCol;
-	 private int outerRow;
-	 private int outerCol;
+	private int innerRow;
+	private int innerCol;
+	private int outerRow;
+	private int outerCol;
 	public Side(int innerRow, int innerCol, int outerRow, int outerCol) {
 		super();
 		this.innerRow = innerRow;
@@ -27,7 +27,7 @@ class Side {//inizio dei lati del rombo
 	public int getOuterCol() {
 		return outerCol;
 	}
-	 
+
 }
 
 public class BlackHeuristic extends Heuristic {
@@ -35,11 +35,12 @@ public class BlackHeuristic extends Heuristic {
 	private static double weightRhombus = 600;
 	private static double weightRowColCover = 450;
 	static double weightVictory = -5000;
-	static double weightNumberOfWhites = -170;
+	static double weightNumberOfWhites = -200;
 	static double weightSurroundingBlackPawn = +100;
 	static double weightNumberOfBlacks = 170;
 	static double weightThreat = -190;
 	static double weightScatter = 100;
+	static double weightNearKing =50;
 	static Side sides[] = new Side[4];
 	static {
 		sides[0]=new Side(3, 2, 2, 1);// up sx
@@ -49,13 +50,13 @@ public class BlackHeuristic extends Heuristic {
 	}
 	static  private  double calculateRhombus (State state) {
 		Double tot=12.0; // normalizzare
-		
+
 		int col, row;
 		int inPawns, outPawns;
 		int points=0;
 		int inc=-1; //direzione diagonale incremento della colonna
 		for (int i = 0; i < 4; i++) {//for every side
-			
+
 			inPawns=0;
 			outPawns=0;
 			if(i>=2)//vanno nell'altra direzione
@@ -80,8 +81,8 @@ public class BlackHeuristic extends Heuristic {
 				points+=3;
 			else if(inPawns==1||outPawns==1)//meta
 				points+=1;
-			//to-do si potrebbe aggiungere un controllo per vedere che siano non ci siano bianchi al di fuori	
-		 }
+			//to-do si potrebbe aggiungere un controllo per vedere che siano non ci siano bianchi al di fuori
+		}
 		return points/tot;
 	}
 	static  private  double calculateRowColCover (State state) {//numero di colonne e righe coperte
@@ -99,7 +100,25 @@ public class BlackHeuristic extends Heuristic {
 		}
 		return points/tot;
 	}
-
+	protected static double calculateNearKing(State state, Coord kingPos) {
+		int res=0;
+		if(kingPos.getRow()!=4 && kingPos.getColumn()!=4)
+			for(int i=0; i<9; i++) {
+				if(state.getPawn(kingPos.getRow()+1, i).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(kingPos.getRow()-1, i).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(i, kingPos.getColumn()+1).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(i, kingPos.getColumn()-1).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(kingPos.getRow(), i).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(i, kingPos.getColumn()).equals(State.Pawn.BLACK))
+					res++;
+			}
+		return res;
+	}
 	public static double eval(State state) {
 		double result = 0.0;
 /*var newCoord = state.getNewCoord();
@@ -107,20 +126,39 @@ public class BlackHeuristic extends Heuristic {
       System.err.println("[Neuromancer] newCoord = null :(");
       throw new NullPointerException();
     }*/
-    Coord kingPos = state.getKingPos();
+		Coord kingPos = state.getKingPos();
 
-    result = weightVictory * winWithAMove(state, kingPos) +
-         weightSurroundingBlackPawn * calculateSurroundingBlackPawn(state, kingPos) +
-         weightNumberOfBlacks * numberOfBlackPawn(state) +
-         weightNumberOfWhites * numberOfWhitePawn(state) +
-         //weightThreat * threat(state, newCoord) +
-				 weightRhombus * calculateRhombus(state) + 
-				 weightScatter * calculateScatter(state) + 
-				 weightRowColCover * calculateRowColCover(state);
+		result = weightVictory * winWithAMove(state, kingPos) +
+				weightSurroundingBlackPawn * calculateSurroundingBlackPawn(state, kingPos) +
+				weightNumberOfBlacks * numberOfBlackPawn(state) +
+				weightNumberOfWhites * numberOfWhitePawn(state) +
+				//weightThreat * threat(state, newCoord) +
+				weightRhombus * calculateRhombus(state) +
+				weightScatter * calculateScatter(state) +
+				weightRowColCover * calculateRowColCover(state)+
+				weightNearKing * calculateNearKing(state, kingPos);
 
 
-    return result;
+		return result;
 
+	}
+
+	/*
+	private static double weightRhombus = 600;
+	private static double weightRowColCover = 450;
+	static double weightVictory = -5000;
+	static double weightNumberOfWhites = -200;
+	static double weightSurroundingBlackPawn = +100;
+	static double weightNumberOfBlacks = 170;
+	static double weightThreat = -190;
+	static double weightScatter = 100;
+	static double weightNearKing =50;
+	 */
+
+
+	public static double[] getBlackWeights() {
+		double[] weights = {weightRhombus, weightRowColCover, weightVictory, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat, weightScatter, weightNearKing};
+		return weights;
 	}
 
 }
