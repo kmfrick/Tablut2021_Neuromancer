@@ -41,6 +41,18 @@ public class BlackHeuristic extends Heuristic {
 	static double weightThreat = -190;
 	static double weightScatter = 100;
 	static double weightNearKing =50;
+
+	//Weights indexes
+	final static int WEIGHT_VICTORY = 0;
+	final static int WEIGHT_RHOMBUS = 1;
+	final static int WEIGHTROWCOLCOVER = 2;
+	final static int NUMBER_WHITES = 3;
+	final static int SURROUNDING_BLACKS = 4;
+	final static int NUMBER_BLACKS = 5;
+	final static int THREAT = 6;
+	final static int SCATTER = 7;
+	final static int NEAR_KING = 8;
+
 	static Side sides[] = new Side[4];
 	static {
 		sides[0]=new Side(3, 2, 2, 1);// up sx
@@ -159,6 +171,46 @@ public class BlackHeuristic extends Heuristic {
 	public static double[] getBlackWeights() {
 		double[] weights = {weightRhombus, weightRowColCover, weightVictory, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat, weightScatter, weightNearKing};
 		return weights;
+	}
+
+	public static void setWeightsAfterGenetic(){
+		String data;
+		try {
+			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				data = myReader.nextLine();
+				System.out.println("LETTA RIGA: " + data);
+				System.out.println(data);
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+		StringTokenizer st = new StringTokenizer(data, ";");
+		int currentIndexOfWeightInEvolutionFile = 0;
+		while (st.hasMoreTokens()) {
+			if(currentIndexOfWeightInEvolutionFile == WEIGHT_RHOMBUS)
+				weightRhombus = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == WEIGHTROWCOLCOVER)
+				weightRowColCover = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == WEIGHT_VICTORY)
+				weightVictory = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == NUMBER_WHITES)
+				weightNumberOfWhites = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == SURROUNDING_BLACKS)
+				weightSurroundingBlackPawn = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == NUMBER_BLACKS)
+				weightNumberOfBlacks = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == THREAT)
+				weightThreat = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == SCATTER)
+				weightScatter = Integer.parseInt(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == NEAR_KING)
+				weightNearKing = Integer.parseInt(st.nextToken().trim());
+			currentIndexOfWeightInEvolutionFile++;
+		}
 	}
 
 }

@@ -188,7 +188,7 @@ public class TablutNeuroClient extends TablutClient {
 					System.out.println("YOU LOSE!");
 
 					try {
-						myWriter.write("LOSE");
+						myWriter.write("LOSE;");
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
@@ -207,7 +207,7 @@ public class TablutNeuroClient extends TablutClient {
 					System.out.println("DRAW!");
 
 					try {
-						myWriter.write("DRAW");
+						myWriter.write("DRAW;");
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
@@ -254,7 +254,7 @@ public class TablutNeuroClient extends TablutClient {
 					matchResult = LOSE; //genetic
 					System.out.println("YOU LOSE!");
 					try {
-						myWriter.write("LOSE");
+						myWriter.write("LOSE;");
 						for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
@@ -292,7 +292,7 @@ public class TablutNeuroClient extends TablutClient {
 					matchResult = DRAW; //genetic
 					System.out.println("DRAW!");
 					try {
-						myWriter.write("DRAW");
+						myWriter.write("DRAW;");
 						for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
