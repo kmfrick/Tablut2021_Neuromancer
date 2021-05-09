@@ -2,6 +2,10 @@ package it.unibo.ai.didattica.competition.tablut.solve;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.Coord;
+import java.util.StringTokenizer;
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.util.Scanner; // Import the Scanner class to read text files
 
 class Side {//inizio dei lati del rombo
 	private int innerRow;
@@ -167,14 +171,25 @@ public class BlackHeuristic extends Heuristic {
 	static double weightNearKing =50;
 	 */
 
+	/*
+	final static int WEIGHT_VICTORY = 0;
+	final static int WEIGHT_RHOMBUS = 1;
+	final static int WEIGHTROWCOLCOVER = 2;
+	final static int NUMBER_WHITES = 3;
+	final static int SURROUNDING_BLACKS = 4;
+	final static int NUMBER_BLACKS = 5;
+	final static int THREAT = 6;
+	final static int SCATTER = 7;
+	final static int NEAR_KING = 8;
+	 */
 
 	public static double[] getBlackWeights() {
-		double[] weights = {weightRhombus, weightRowColCover, weightVictory, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat, weightScatter, weightNearKing};
+		double[] weights = {weightVictory, weightRhombus, weightRowColCover, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat, weightScatter, weightNearKing};
 		return weights;
 	}
 
 	public static void setWeightsAfterGenetic(){
-		String data;
+		String data = "";
 		try {
 			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
 			Scanner myReader = new Scanner(myObj);
@@ -192,23 +207,23 @@ public class BlackHeuristic extends Heuristic {
 		int currentIndexOfWeightInEvolutionFile = 0;
 		while (st.hasMoreTokens()) {
 			if(currentIndexOfWeightInEvolutionFile == WEIGHT_RHOMBUS)
-				weightRhombus = Integer.parseInt(st.nextToken().trim());
+				weightRhombus = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == WEIGHTROWCOLCOVER)
-				weightRowColCover = Integer.parseInt(st.nextToken().trim());
+				weightRowColCover = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == WEIGHT_VICTORY)
-				weightVictory = Integer.parseInt(st.nextToken().trim());
+				weightVictory = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_WHITES)
-				weightNumberOfWhites = Integer.parseInt(st.nextToken().trim());
+				weightNumberOfWhites = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SURROUNDING_BLACKS)
-				weightSurroundingBlackPawn = Integer.parseInt(st.nextToken().trim());
+				weightSurroundingBlackPawn = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_BLACKS)
-				weightNumberOfBlacks = Integer.parseInt(st.nextToken().trim());
+				weightNumberOfBlacks = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == THREAT)
-				weightThreat = Integer.parseInt(st.nextToken().trim());
+				weightThreat = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SCATTER)
-				weightScatter = Integer.parseInt(st.nextToken().trim());
+				weightScatter = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NEAR_KING)
-				weightNearKing = Integer.parseInt(st.nextToken().trim());
+				weightNearKing = Double.parseDouble(st.nextToken().trim());
 			currentIndexOfWeightInEvolutionFile++;
 		}
 	}

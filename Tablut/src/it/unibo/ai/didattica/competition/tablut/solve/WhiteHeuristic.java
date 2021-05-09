@@ -95,23 +95,23 @@ public class WhiteHeuristic extends Heuristic {
 		int currentIndexOfWeightInEvolutionFile = 0;
 		while (st.hasMoreTokens()) {
 			if(currentIndexOfWeightInEvolutionFile == WEIGHT_VICTORY)
-				weightVictory = Integer.parseInt(st.nextToken().trim());
+				weightVictory = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == KING_POSITION)
-				weightKingPosition = Integer.parseInt(st.nextToken().trim());
+				weightKingPosition = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == DISTANCE_CENTRE)
-				weightDistanceFromCentre = Integer.parseInt(st.nextToken().trim());
+				weightDistanceFromCentre = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_WHITES)
-				weightNumberOfWhites = Integer.parseInt(st.nextToken().trim());
+				weightNumberOfWhites = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SURROUNDING_BLACKS)
-				weightSurroundingBlackPawn = Integer.parseInt(st.nextToken().trim());
+				weightSurroundingBlackPawn = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_BLACKS)
-				weightNumberOfBlacks = Integer.parseInt(st.nextToken().trim());
+				weightNumberOfBlacks = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == THREAT)
-				weightThreat = Integer.parseInt(st.nextToken().trim());
+				weightThreat = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SCATTER)
-				weightScatter = Integer.parseInt(st.nextToken().trim());
+				weightScatter = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NEAR_KING)
-				weightNearKing = Integer.parseInt(st.nextToken().trim());
+				weightNearKing = Double.parseDouble(st.nextToken().trim());
 			currentIndexOfWeightInEvolutionFile++;
 		}
 	}
