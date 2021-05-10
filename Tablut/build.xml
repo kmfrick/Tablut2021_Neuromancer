@@ -1,5 +1,5 @@
 <!-- Le istruzioni su come usare ANT per eseguire il progetto, sono incluse nel file
-     di README, nella home del progetto -->
+di README, nella home del progetto -->
 
 <project name="Tablut">
 
@@ -19,7 +19,7 @@
             <fileset dir="src" excludes="*.java"/>
         </copy>
     </target>
-    
+
     <target name="server">
         <java classname="it.unibo.ai.didattica.competition.tablut.server.Server" fork="true">
             <classpath>
@@ -45,7 +45,7 @@
             </classpath>
         </java>
     </target>
-	
+
     <target name="humanwhite">
         <java classname="it.unibo.ai.didattica.competition.tablut.client.TablutHumanWhiteClient" fork="true">
             <classpath>
@@ -54,7 +54,7 @@
             </classpath>
         </java>
     </target>
-	
+
     <target name="humanblack">
         <java classname="it.unibo.ai.didattica.competition.tablut.client.TablutHumanBlackClient" fork="true">
             <classpath>
@@ -63,7 +63,7 @@
             </classpath>
         </java>
     </target>
-	
+
 
     <target name="tester">
         <java classname="it.unibo.ai.didattica.competition.tablut.tester.Tester" fork="true">
@@ -82,13 +82,37 @@
             </classpath>
         </java>
     </target>
-	<target name="neuroblack">
-	        <java classname="it.unibo.ai.didattica.competition.tablut.client.TablutNeuroBlackClient" fork="true">
-	            <classpath>
-	                <pathelement location="lib/gson-2.2.2.jar"/>
-	                <pathelement location="build"/>
-	            </classpath>
-	        </java>
-	    </target>
+    <target name="neuroblack">
+        <java classname="it.unibo.ai.didattica.competition.tablut.client.TablutNeuroBlackClient" fork="true">
+            <classpath>
+                <pathelement location="lib/gson-2.2.2.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="jarneuroblack" depends="compile">
+        <mkdir dir="jar"/>
+        <jar destfile="jar/neuroblack.jar" basedir="build">
+            <zipgroupfileset dir="lib">
+                <include name="gson-2.2.2.jar" />
+            </zipgroupfileset>
+            <manifest>
+                <attribute name="Main-Class" value="it.unibo.ai.didattica.competition.tablut.client.TablutNeuroBlackClient"/>
+            </manifest>
+        </jar>
+    </target>
+    <target name="jarneurowhite" depends="compile">
+        <mkdir dir="jar"/>
+        <jar destfile="jar/neurowhite.jar" basedir="build">
+            <zipgroupfileset dir="lib">
+                <include name="gson-2.2.2.jar" />
+            </zipgroupfileset>
+            <manifest>
+                <attribute name="Main-Class" value="it.unibo.ai.didattica.competition.tablut.client.TablutNeuroWhiteClient"/>
+            </manifest>
+        </jar>
+    </target>
+
 
 </project>
