@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
+import java.util.StringTokenizer;
 
 import it.unibo.ai.didattica.competition.tablut.domain.*;
 import it.unibo.ai.didattica.competition.tablut.solve.TablutMinimax;
@@ -24,6 +25,7 @@ public class TablutNeuroClient extends TablutClient {
 
 	//file management for genetic algorithm
 	//TODO: Comment when deliver the application
+	protected static final String outFilePath = "/Users/kmfrick/Documents/Code/Tablut2021_Neuromancer/evolution_out.txt";
 	private static FileWriter myWriter;
 	private final static int WIN = 0, LOSE = 1, DRAW = 2;
 	private static int matchResult;
@@ -66,7 +68,7 @@ public class TablutNeuroClient extends TablutClient {
 
 		//file management for genetic algorithm
 		try {
-			myWriter = new FileWriter("/Users/antonyzappacosta/Desktop/filesForGenetic/NeuroAppOutput.txt", true);
+			myWriter = new FileWriter(outFilePath, true);
 			matchResult = -1;
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -84,7 +86,14 @@ public class TablutNeuroClient extends TablutClient {
 	@Override
 	public void run() {
 		System.out.println("You are player " + this.getPlayer().toString() + "!");
-		Heuristic.setWeightsAfterGenetic();
+
+		if(this.getPlayer().toString().equals("B")){
+			BlackHeuristic.setWeightsAfterGenetic();
+		} else{
+			WhiteHeuristic.setWeightsAfterGenetic();
+		}
+
+		//Heuristic.setWeightsAfterGenetic();
 		String actionStringFrom = "";
 		String actionStringTo = "";
 		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));

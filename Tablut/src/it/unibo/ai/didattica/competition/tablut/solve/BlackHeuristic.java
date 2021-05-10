@@ -8,10 +8,10 @@ import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.StringTokenizer;
 
 class Side {//inizio dei lati del rombo
-	private int innerRow;
-	private int innerCol;
-	private int outerRow;
-	private int outerCol;
+	 private int innerRow;
+	 private int innerCol;
+	 private int outerRow;
+	 private int outerCol;
 	public Side(int innerRow, int innerCol, int outerRow, int outerCol) {
 		super();
 		this.innerRow = innerRow;
@@ -31,7 +31,7 @@ class Side {//inizio dei lati del rombo
 	public int getOuterCol() {
 		return outerCol;
 	}
-
+	 
 }
 
 public class BlackHeuristic extends Heuristic {
@@ -101,6 +101,10 @@ public class BlackHeuristic extends Heuristic {
 		}
 		return points/tot;
 	}
+  protected static int threat(State state, Coord newCoord) {
+    return threat(state, newCoord, State.Pawn.BLACK);
+  }
+
 	static  private  double calculateRowColCover (State state) {//numero di colonne e righe coperte
 		int points=0, j;
 		double tot=18;
@@ -137,18 +141,14 @@ public class BlackHeuristic extends Heuristic {
 	}
 	public static double eval(State state) {
 		double result = 0.0;
-/*var newCoord = state.getNewCoord();
-    if (newCoord == null) {
-      System.err.println("[Neuromancer] newCoord = null :(");
-      throw new NullPointerException();
-    }*/
+		var newCoord = state.getNewCoord();
 		Coord kingPos = state.getKingPos();
 
 		result = weightVictory * winWithAMove(state, kingPos) +
 				weightSurroundingBlackPawn * calculateSurroundingBlackPawn(state, kingPos) +
 				weightNumberOfBlacks * numberOfBlackPawn(state) +
 				weightNumberOfWhites * numberOfWhitePawn(state) +
-				//weightThreat * threat(state, newCoord) +
+				weightThreat * threat(state, newCoord) +
 				weightRhombus * calculateRhombus(state) +
 				weightScatter * calculateScatter(state) +
 				weightRowColCover * calculateRowColCover(state)+
@@ -159,28 +159,16 @@ public class BlackHeuristic extends Heuristic {
 
 	}
 
-	/*
-	private static double weightRhombus = 600;
-	private static double weightRowColCover = 450;
-	static double weightVictory = -5000;
-	static double weightNumberOfWhites = -200;
-	static double weightSurroundingBlackPawn = +100;
-	static double weightNumberOfBlacks = 170;
-	static double weightThreat = -190;
-	static double weightScatter = 100;
-	static double weightNearKing =50;
-	 */
-
 
 	public static double[] getBlackWeights() {
-		double[] weights = {weightRhombus, weightRowColCover, weightVictory, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat, weightScatter, weightNearKing};
+		double[] weights = {weightVictory, weightRhombus, weightRowColCover, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat, weightScatter, weightNearKing};
 		return weights;
 	}
 
 	public static void setWeightsAfterGenetic(){
 		String data = "";
 		try {
-			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
+			File myObj = new File(weightFilePath);
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				data = myReader.nextLine();
@@ -196,23 +184,23 @@ public class BlackHeuristic extends Heuristic {
 		int currentIndexOfWeightInEvolutionFile = 0;
 		while (st.hasMoreTokens()) {
 			if(currentIndexOfWeightInEvolutionFile == WEIGHT_RHOMBUS)
-				weightRhombus = Integer.parseInt(st.nextToken().trim());
+				weightRhombus = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == WEIGHTROWCOLCOVER)
-				weightRowColCover = Integer.parseInt(st.nextToken().trim());
+				weightRowColCover = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == WEIGHT_VICTORY)
-				weightVictory = Integer.parseInt(st.nextToken().trim());
+				weightVictory = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_WHITES)
-				weightNumberOfWhites = Integer.parseInt(st.nextToken().trim());
+				weightNumberOfWhites = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SURROUNDING_BLACKS)
-				weightSurroundingBlackPawn = Integer.parseInt(st.nextToken().trim());
+				weightSurroundingBlackPawn = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_BLACKS)
-				weightNumberOfBlacks = Integer.parseInt(st.nextToken().trim());
+				weightNumberOfBlacks = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == THREAT)
-				weightThreat = Integer.parseInt(st.nextToken().trim());
+				weightThreat = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SCATTER)
-				weightScatter = Integer.parseInt(st.nextToken().trim());
+				weightScatter = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NEAR_KING)
-				weightNearKing = Integer.parseInt(st.nextToken().trim());
+				weightNearKing = Double.parseDouble(st.nextToken().trim());
 			currentIndexOfWeightInEvolutionFile++;
 		}
 	}

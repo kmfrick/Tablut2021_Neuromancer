@@ -7,21 +7,14 @@ import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 
+import java.util.Deque;
+import java.util.ArrayDeque;
+
 public abstract class Heuristic {
 
-	//new weights
-	/*
-	static double weightVictory = 5000;
-	static double weightKingPosition = 200;
-	static double weightDistanceFromCentre = 250;
-	static double weightNumberOfWhites = 170;
-	static double weightSurroundingBlackPawn = -100;
-	static double weightNumberOfBlacks = -170;
-	static double weightThreat = -190;
-	static double weightScatter = 100;
-	 */
-
-
+	protected static final String weightFilePath = "/Users/kmfrick/Documents/Code/Tablut2021_Neuromancer/evolution.txt";
+	
+	protected static Deque moves;
 
 	static int[][] kingScoreM = new int[9][9];
 	static boolean[][] citadels=new boolean [9][9];
@@ -103,12 +96,16 @@ public abstract class Heuristic {
 	// metodo che valuta se l'avversario può mangiare il pezzo appena mosso con una
 	// sola mossa successiva
 	// newCoord = nuova coordinata del pezzo mosso
-	protected static int threat(State state, Coord newCoord) {
+	protected static int threat(State state, Coord newCoord, State.Pawn player) {
 		if (newCoord == null) return 0;
+		var turnPlayer = state.getPawn(newCoord.getRow(), newCoord.getColumn());
+		if (!turnPlayer.equals(player)) {
+			return 0;
+		}
 		int result = 0;
 		State.Pawn opponent;
 		// State.Pawn pawnColumnBotton, pawnColumnUp, pawnRowRight, pawnRowLeft;
-		if (state.getPawn(newCoord.getRow(), newCoord.getColumn()) == State.Pawn.WHITE) { // il pezzo mosso Ã¨ bianco
+		if (player == State.Pawn.WHITE) { // il pezzo mosso Ã¨ bianco
 			opponent = State.Pawn.BLACK;
 		} else {
 			opponent = State.Pawn.WHITE;
@@ -233,10 +230,9 @@ public abstract class Heuristic {
 
 	}
 
+
+
 	protected static double calculateScatter(State state) {
-		if (state.moveIsRecent(state.getMoveStartCoord())) {
-			return -1;
-		}
 		return 0;
 	}
 
@@ -251,7 +247,7 @@ public abstract class Heuristic {
 
 	public static void setWeightsAfterGenetic(){
 		try {
-			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
+			File myObj = new File(weightFilePath);
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
