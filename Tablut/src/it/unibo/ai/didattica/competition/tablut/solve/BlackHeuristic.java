@@ -101,6 +101,10 @@ public class BlackHeuristic extends Heuristic {
 		}
 		return points/tot;
 	}
+  protected static int threat(State state, Coord newCoord) {
+    return threat(state, newCoord, State.Pawn.BLACK);
+  }
+
 	static  private  double calculateRowColCover (State state) {//numero di colonne e righe coperte
 		int points=0, j;
 		double tot=18;
@@ -137,18 +141,14 @@ public class BlackHeuristic extends Heuristic {
 	}
 	public static double eval(State state) {
 		double result = 0.0;
-/*var newCoord = state.getNewCoord();
-    if (newCoord == null) {
-      System.err.println("[Neuromancer] newCoord = null :(");
-      throw new NullPointerException();
-    }*/
+		var newCoord = state.getNewCoord();
 		Coord kingPos = state.getKingPos();
 
 		result = weightVictory * winWithAMove(state, kingPos) +
 				weightSurroundingBlackPawn * calculateSurroundingBlackPawn(state, kingPos) +
 				weightNumberOfBlacks * numberOfBlackPawn(state) +
 				weightNumberOfWhites * numberOfWhitePawn(state) +
-				//weightThreat * threat(state, newCoord) +
+				weightThreat * threat(state, newCoord) +
 				weightRhombus * calculateRhombus(state) +
 				weightScatter * calculateScatter(state) +
 				weightRowColCover * calculateRowColCover(state)+
@@ -168,7 +168,7 @@ public class BlackHeuristic extends Heuristic {
 	public static void setWeightsAfterGenetic(){
 		String data = "";
 		try {
-			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
+			File myObj = new File(weightFilePath);
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				data = myReader.nextLine();

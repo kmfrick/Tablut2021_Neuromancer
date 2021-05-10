@@ -25,6 +25,7 @@ public class TablutNeuroClient extends TablutClient {
 
 	//file management for genetic algorithm
 	//TODO: Comment when deliver the application
+	protected static final String outFilePath = "/Users/kmfrick/Documents/Code/Tablut2021_Neuromancer/evolution_out.txt";
 	private static FileWriter myWriter;
 	private final static int WIN = 0, LOSE = 1, DRAW = 2;
 	private static int matchResult;
@@ -67,7 +68,7 @@ public class TablutNeuroClient extends TablutClient {
 
 		//file management for genetic algorithm
 		try {
-			myWriter = new FileWriter("/Users/antonyzappacosta/Desktop/filesForGenetic/NeuroAppOutput.txt", true);
+			myWriter = new FileWriter(outFilePath, true);
 			matchResult = -1;
 		} catch (IOException e) {
 			System.out.println("An error occurred.");

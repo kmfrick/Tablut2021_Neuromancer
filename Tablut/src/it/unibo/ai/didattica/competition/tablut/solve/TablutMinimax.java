@@ -12,7 +12,7 @@ public class TablutMinimax extends IterativeDeepeningAlphaBetaSearch<State, Acti
 	
 
 	public TablutMinimax(Game<State, Action, State.Turn> game) {
-		super(game, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 9);
+		super(game, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 5);
 	}
 
 	@Override

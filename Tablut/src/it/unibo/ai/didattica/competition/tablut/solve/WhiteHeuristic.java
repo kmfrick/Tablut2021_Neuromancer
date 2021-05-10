@@ -29,6 +29,10 @@ public class WhiteHeuristic extends Heuristic {
 	final static int SCATTER = 7;
 	final static int NEAR_KING = 8;
 
+	protected static int threat(State state, Coord newCoord) {
+		return threat(state, newCoord, State.Pawn.WHITE);
+	}
+
 	protected static double getKingScore(Coord kingCoor) {
 		return kingScoreM[kingCoor.getRow()][kingCoor.getColumn()];
 	}
@@ -73,7 +77,7 @@ public class WhiteHeuristic extends Heuristic {
 	public static void setWeightsAfterGenetic(){
 		String data = "";
 		try {
-			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
+			File myObj = new File(weightFilePath);
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				data = myReader.nextLine();
