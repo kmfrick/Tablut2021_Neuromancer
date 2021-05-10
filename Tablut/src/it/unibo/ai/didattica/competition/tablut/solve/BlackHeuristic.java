@@ -2,6 +2,10 @@ package it.unibo.ai.didattica.competition.tablut.solve;
 
 import it.unibo.ai.didattica.competition.tablut.domain.State;
 import it.unibo.ai.didattica.competition.tablut.domain.Coord;
+import java.io.File;  // Import the File class
+import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.util.Scanner; // Import the Scanner class to read text files
+import java.util.StringTokenizer;
 
 class Side {//inizio dei lati del rombo
 	private int innerRow;
@@ -174,7 +178,7 @@ public class BlackHeuristic extends Heuristic {
 	}
 
 	public static void setWeightsAfterGenetic(){
-		String data;
+		String data = "";
 		try {
 			File myObj = new File("/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt");
 			Scanner myReader = new Scanner(myObj);
