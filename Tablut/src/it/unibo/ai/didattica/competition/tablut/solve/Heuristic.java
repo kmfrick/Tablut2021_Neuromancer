@@ -104,6 +104,7 @@ public abstract class Heuristic {
 	// sola mossa successiva
 	// newCoord = nuova coordinata del pezzo mosso
 	protected static int threat(State state, Coord newCoord) {
+		if (newCoord == null) return 0;
 		int result = 0;
 		State.Pawn opponent;
 		// State.Pawn pawnColumnBotton, pawnColumnUp, pawnRowRight, pawnRowLeft;

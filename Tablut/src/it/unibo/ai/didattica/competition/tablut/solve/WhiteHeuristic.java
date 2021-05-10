@@ -48,11 +48,7 @@ public class WhiteHeuristic extends Heuristic {
 	}
 	public static double eval(State state){
 		double result = 0.0;
-		/*Coord newCoord = state.getNewCoord();
-		if (newCoord == null) {
-			System.err.println("[Neuromancer] newCoord = null :(");
-			throw new NullPointerException();
-		}*/
+		Coord newCoord = state.getNewCoord();
 		Coord kingPos = state.getKingPos();
 
 		result = weightVictory * winWithAMove(state, kingPos) +
@@ -62,10 +58,8 @@ public class WhiteHeuristic extends Heuristic {
 				weightNumberOfBlacks * numberOfBlackPawn(state) +
 				weightScatter * calculateScatter(state) +
 				weightNumberOfWhites * numberOfWhitePawn(state)+
-				weightNearKing * calculateNearKing(state, kingPos)
-		//+ weightThreat * threat(state, newCoord); PERCHÈ È COMMENTATA QUESTA?
-
-		;
+				weightNearKing * calculateNearKing(state, kingPos) + 
+				weightThreat * threat(state, newCoord); 
 
 		return result;
 
