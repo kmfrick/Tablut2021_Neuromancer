@@ -42,9 +42,8 @@ public class BlackHeuristic extends Heuristic {
 	static double weightNumberOfWhites = -200;
 	static double weightSurroundingBlackPawn = +100;
 	static double weightNumberOfBlacks = 170;
-	static double weightThreat = -190;
-	static double weightScatter = 100;
-	static double weightNearKing =50;
+	static double weightThreat = -100;
+	static double weightBlackNearKing =50;
 
 	//Weights indexes
 	final static int WEIGHT_VICTORY = 0;
@@ -54,8 +53,7 @@ public class BlackHeuristic extends Heuristic {
 	final static int SURROUNDING_BLACKS = 4;
 	final static int NUMBER_BLACKS = 5;
 	final static int THREAT = 6;
-	final static int SCATTER = 7;
-	final static int NEAR_KING = 8;
+	final static int BLACK_NEAR_KING = 7;
 
 	static Side sides[] = new Side[4];
 	static {
@@ -120,25 +118,7 @@ public class BlackHeuristic extends Heuristic {
 		}
 		return points/tot;
 	}
-	protected static double calculateNearKing(State state, Coord kingPos) {
-		int res=0;
-		if(kingPos.getRow()!=4 && kingPos.getColumn()!=4)
-			for(int i=0; i<9; i++) {
-				if(state.getPawn(kingPos.getRow()+1, i).equals(State.Pawn.BLACK))
-					res++;
-				if(state.getPawn(kingPos.getRow()-1, i).equals(State.Pawn.BLACK))
-					res++;
-				if(state.getPawn(i, kingPos.getColumn()+1).equals(State.Pawn.BLACK))
-					res++;
-				if(state.getPawn(i, kingPos.getColumn()-1).equals(State.Pawn.BLACK))
-					res++;
-				if(state.getPawn(kingPos.getRow(), i).equals(State.Pawn.BLACK))
-					res++;
-				if(state.getPawn(i, kingPos.getColumn()).equals(State.Pawn.BLACK))
-					res++;
-			}
-		return res;
-	}
+	
 	public static double eval(State state) {
 		double result = 0.0;
 		var newCoord = state.getNewCoord();
@@ -150,9 +130,8 @@ public class BlackHeuristic extends Heuristic {
 				weightNumberOfWhites * numberOfWhitePawn(state) +
 				weightThreat * threat(state, newCoord) +
 				weightRhombus * calculateRhombus(state) +
-				weightScatter * calculateScatter(state) +
 				weightRowColCover * calculateRowColCover(state)+
-				weightNearKing * calculateNearKing(state, kingPos);
+				weightBlackNearKing * calculateBlackNearKing(state, kingPos);
 
 
 		return result;
@@ -161,7 +140,7 @@ public class BlackHeuristic extends Heuristic {
 
 
 	public static double[] getBlackWeights() {
-		double[] weights = {weightVictory, weightRhombus, weightRowColCover, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat, weightScatter, weightNearKing};
+		double[] weights = {weightVictory, weightRhombus, weightRowColCover, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat,  weightBlackNearKing};
 		return weights;
 	}
 
@@ -197,10 +176,8 @@ public class BlackHeuristic extends Heuristic {
 				weightNumberOfBlacks = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == THREAT)
 				weightThreat = Double.parseDouble(st.nextToken().trim());
-			if(currentIndexOfWeightInEvolutionFile == SCATTER)
-				weightScatter = Double.parseDouble(st.nextToken().trim());
-			if(currentIndexOfWeightInEvolutionFile == NEAR_KING)
-				weightNearKing = Double.parseDouble(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == BLACK_NEAR_KING)
+				weightBlackNearKing = Double.parseDouble(st.nextToken().trim());
 			currentIndexOfWeightInEvolutionFile++;
 		}
 	}
