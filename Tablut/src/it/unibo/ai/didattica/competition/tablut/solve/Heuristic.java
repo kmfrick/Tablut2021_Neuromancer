@@ -12,7 +12,7 @@ import java.util.ArrayDeque;
 
 public abstract class Heuristic {
 
-	protected static final String weightFilePath = "/Users/kmfrick/Documents/Code/Tablut2021_Neuromancer/evolution.txt";
+	protected static final String weightFilePath = "/Users/antonyzappacosta/Desktop/filesForGenetic/evolution.txt";
 	
 	protected static Deque moves;
 
