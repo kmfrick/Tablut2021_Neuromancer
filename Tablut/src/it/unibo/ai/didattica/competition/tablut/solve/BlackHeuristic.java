@@ -162,12 +162,12 @@ public class BlackHeuristic extends Heuristic {
 		StringTokenizer st = new StringTokenizer(data, ";");
 		int currentIndexOfWeightInEvolutionFile = 0;
 		while (st.hasMoreTokens()) {
+			if(currentIndexOfWeightInEvolutionFile == WEIGHT_VICTORY)
+				weightVictory = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == WEIGHT_RHOMBUS)
 				weightRhombus = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == WEIGHTROWCOLCOVER)
 				weightRowColCover = Double.parseDouble(st.nextToken().trim());
-			if(currentIndexOfWeightInEvolutionFile == WEIGHT_VICTORY)
-				weightVictory = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_WHITES)
 				weightNumberOfWhites = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SURROUNDING_BLACKS)
