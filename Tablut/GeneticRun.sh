@@ -1,7 +1,7 @@
 #!/bin/bash
 BRAINMATES_PATH="/Users/kmfrick/Documents/Code/Tablut2020_BrAInmates/jars/BrAInmates.jar"
 NEUROGENETIC_PATH="/Users/kmfrick/Documents/Code/GeneticAlgorithmNeuromancer"
-TIMEOUT=1
+TIMEOUT=50
 
 play() {
 	echo "Removing game_start${1}"
