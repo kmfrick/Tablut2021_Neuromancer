@@ -11,8 +11,8 @@ import it.unibo.ai.didattica.competition.tablut.domain.*;
 public class TablutMinimax extends IterativeDeepeningAlphaBetaSearch<State, Action, State.Turn> {
 	
 
-	public TablutMinimax(Game<State, Action, State.Turn> game) {
-		super(game, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 5);
+	public TablutMinimax(Game<State, Action, State.Turn> game, int searchTime) {
+		super(game, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, searchTime);
 	}
 
 	@Override

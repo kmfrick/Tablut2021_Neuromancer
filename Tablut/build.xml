@@ -74,23 +74,6 @@ di README, nella home del progetto -->
         </java>
     </target>
 
-    <target name="neurowhite">
-        <java classname="it.unibo.ai.didattica.competition.tablut.client.TablutNeuroWhiteClient" fork="true">
-            <classpath>
-                <pathelement location="lib/gson-2.2.2.jar"/>
-                <pathelement location="build"/>
-            </classpath>
-        </java>
-    </target>
-    <target name="neuroblack">
-        <java classname="it.unibo.ai.didattica.competition.tablut.client.TablutNeuroBlackClient" fork="true">
-            <classpath>
-                <pathelement location="lib/gson-2.2.2.jar"/>
-                <pathelement location="build"/>
-            </classpath>
-        </java>
-    </target>
-
     <target name="jarneuroblack" depends="compile">
         <mkdir dir="jar"/>
         <jar destfile="jar/neuroblack.jar" basedir="build">
@@ -113,6 +96,17 @@ di README, nella home del progetto -->
             </manifest>
         </jar>
     </target>
-
+    <target name="jarserver" depends="compile">
+        <mkdir dir="jar"/>
+        <jar destfile="jar/server.jar" basedir="build">
+            <zipgroupfileset dir="lib">
+                <include name="commons-cli-1.4.jar"/>
+                <include name="gson-2.2.2.jar" />
+            </zipgroupfileset>
+            <manifest>
+                <attribute name="Main-Class" value="it.unibo.ai.didattica.competition.tablut.server.Server"/>
+            </manifest>
+        </jar>
+    </target>
 
 </project>
