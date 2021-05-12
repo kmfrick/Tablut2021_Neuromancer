@@ -11,7 +11,7 @@ public class TablutNeuroBlackClient {
         System.out.println("NeuroBlackClient::main() called");
         String[] array = new String[]{"BLACK"};
         if (args.length>0){
-            array = new String[]{"BLACK", args[0]};
+            array = new String[]{"BLACK", args[0], args[1]};
         }
         TablutNeuroClient.main(array);
     }

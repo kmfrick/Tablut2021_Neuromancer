@@ -26,6 +26,7 @@ public class TablutNeuroClient extends TablutClient {
 	//file management for genetic algorithm
 	//TODO: Comment when deliver the application
 	protected static final String outFilePath = "/tmp/NeuroClientOutput.txt";
+	protected static final String weightFilePath = "/tmp/NeuroWeights.txt";
 	private static FileWriter myWriter;
 	private final static int WIN = 0, LOSE = 1, DRAW = 2;
 	private static int matchResult;
@@ -46,28 +47,31 @@ public class TablutNeuroClient extends TablutClient {
 	private TablutMinimax search;
 	private int game;
 	private int searchTime;
+	private int id;
 
-	public TablutNeuroClient(String player, int game, int searchTime) throws UnknownHostException, IOException {
+	public TablutNeuroClient(String player, int game, int searchTime, int id) throws UnknownHostException, IOException {
 		super(player, "Neuromancer");
 		this.game = game;
 		this.searchTime = searchTime;
+		this.id = id;
 	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 
 		int gametype = 4;
-		if (args.length < 2) {
-			System.out.println("You must specify which player you are (WHITE or BLACK) and the timeout!");
+		if (args.length < 3) {
+			System.out.println("Usage: client.jar WHITE/BLACK timeout id");
 			System.exit(-1);
 		}
 		System.out.println("Selected client: " + args[0]);
 		System.out.println("Search time: " + args[1] + " s");
+		System.out.println("id: " + args[2]);
 
-		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]));
+		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
 		//file management for genetic algorithm
 		try {
-			myWriter = new FileWriter(outFilePath);
+			myWriter = new FileWriter(outFilePath + args[2]);
 			matchResult = -1;
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -88,12 +92,11 @@ public class TablutNeuroClient extends TablutClient {
 		System.out.println("You are player " + this.getPlayer().toString() + "!");
 
 		if(this.getPlayer().toString().equals("B")){
-			BlackHeuristic.setWeightsAfterGenetic();
+			BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
 		} else{
-			WhiteHeuristic.setWeightsAfterGenetic();
+			WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
 		}
 
-		//Heuristic.setWeightsAfterGenetic();
 		String actionStringFrom = "";
 		String actionStringTo = "";
 		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
