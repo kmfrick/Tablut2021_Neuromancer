@@ -12,9 +12,6 @@ import java.util.ArrayDeque;
 
 public abstract class Heuristic {
 
-	protected static final String weightFilePath = "/tmp/NeuroWeights.txt";
-
-	
 	protected static Deque moves;
 
 	static int[][] kingScoreM = new int[9][9];
@@ -264,7 +261,8 @@ public abstract class Heuristic {
 			}
 		return res;
 	}
-	public static void setWeightsAfterGenetic(){
+	/*
+	public static void setWeightsAfterGenetic(String weightFilePath){
 		try {
 			File myObj = new File(weightFilePath);
 			Scanner myReader = new Scanner(myObj);
@@ -278,6 +276,6 @@ public abstract class Heuristic {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 }

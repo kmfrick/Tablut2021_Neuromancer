@@ -9,27 +9,29 @@ play() {
 	rm logs/*
 	java -jar jar/server.jar  &
 	sleep 4
-	java -jar jar/neurowhite.jar ${TIMEOUT} > white.log &
-	java -jar ${BRAINMATES_PATH} black ${TIMEOUT} localhost > black.log
+	java -jar jar/neurowhite.jar ${TIMEOUT} ${1} > white${1}.log &
+	java -jar ${BRAINMATES_PATH} black ${TIMEOUT} localhost > black${1}.log
 	sleep 4
-	cat logs/*Neuromance* | wc -l | tr -d ' ' >> /tmp/NeuroClientOutput.txt
+	cat logs/*Neuromance* | wc -l | tr -d ' ' >> /tmp/NeuroClientOutput.txt${1}
 	echo "Creating genetic_start${1}"
 	touch /tmp/genetic_start${1}
 }
 
 if (( $# != 1 )); then
     >&2 echo "Please specify process ID"
+		exit
 fi
 
 ID=${1}
 
 it=1
 killall java # Dangerous :)
-rm genetic.log black.log white.log server.log
+rm genetic${ID}.log black${ID}.log white${ID}.log server${ID}.log
 play ${ID}
 java -cp ${NEUROGENETIC_PATH} MainGeneticAlgorithm  0  WHITE  &
-while [[ 1 -eq 1 ]]
+while [[ $(grep WIN /tmp/NeuroClientOutput.txt${ID} | wc -l) -ne 1 ]]
 do
+	grep WIN /tmp/NeuroClientOutput.txt${ID} | wc -l
 	echo "Waiting for /tmp/game_start${ID}"
 	while [[  ! -f /tmp/game_start${ID} ]]  
 	do

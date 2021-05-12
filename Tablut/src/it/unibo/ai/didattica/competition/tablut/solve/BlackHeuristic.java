@@ -144,7 +144,7 @@ public class BlackHeuristic extends Heuristic {
 		return weights;
 	}
 
-	public static void setWeightsAfterGenetic(){
+	public static void setWeightsAfterGenetic(String weightFilePath){
 		String data = "";
 		try {
 			File myObj = new File(weightFilePath);
