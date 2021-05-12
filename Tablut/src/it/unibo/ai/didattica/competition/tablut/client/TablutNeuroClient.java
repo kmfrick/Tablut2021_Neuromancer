@@ -67,7 +67,7 @@ public class TablutNeuroClient extends TablutClient {
 
 		//file management for genetic algorithm
 		try {
-			myWriter = new FileWriter(outFilePath, true);
+			myWriter = new FileWriter(outFilePath);
 			matchResult = -1;
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -179,10 +179,11 @@ public class TablutNeuroClient extends TablutClient {
 
 					try {
 						myWriter.write("WIN;");
+						/*
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
-						myWriter.write("\n");
+						myWriter.write("\n");*/
 						myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
@@ -198,10 +199,11 @@ public class TablutNeuroClient extends TablutClient {
 
 					try {
 						myWriter.write("LOSE;");
+						/*
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
-						myWriter.write("\n");
+						myWriter.write("\n");*/
 						myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
@@ -217,10 +219,10 @@ public class TablutNeuroClient extends TablutClient {
 
 					try {
 						myWriter.write("DRAW;");
-						for(double peso : whiteHeuristicWeights){
+						/*for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
-						myWriter.write("\n");
+						myWriter.write("\n");*/
 						myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
@@ -264,10 +266,10 @@ public class TablutNeuroClient extends TablutClient {
 					System.out.println("YOU LOSE!");
 					try {
 						myWriter.write("LOSE;");
-						for(double peso : blackHeuristicWeights){
+						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
-						myWriter.write("\n");
+						myWriter.write("\n");*/
 						myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
@@ -283,10 +285,10 @@ public class TablutNeuroClient extends TablutClient {
 
 					try {
 						myWriter.write("WIN;");
-						for(double peso : blackHeuristicWeights){
+						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
-						myWriter.write("\n");
+						myWriter.write("\n");*/
 						myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
@@ -302,10 +304,10 @@ public class TablutNeuroClient extends TablutClient {
 					System.out.println("DRAW!");
 					try {
 						myWriter.write("DRAW;");
-						for(double peso : blackHeuristicWeights){
+						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
-						myWriter.write("\n");
+						myWriter.write("\n");*/
 						myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {

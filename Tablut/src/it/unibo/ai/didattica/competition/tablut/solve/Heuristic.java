@@ -13,6 +13,7 @@ import java.util.ArrayDeque;
 public abstract class Heuristic {
 
 	protected static final String weightFilePath = "/tmp/NeuroWeights.txt";
+
 	
 	protected static Deque moves;
 
@@ -244,7 +245,25 @@ public abstract class Heuristic {
 	protected static boolean isCitadel(int row, int col) {//castle  too
 		return citadels[row][col];
 	}
-
+	protected static double calculateBlackNearKing(State state, Coord kingPos) {
+		int res=0;
+		if(kingPos.getRow()!=4 && kingPos.getColumn()!=4)
+			for(int i=0; i<9; i++) {
+				if(state.getPawn(kingPos.getRow()+1, i).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(kingPos.getRow()-1, i).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(i, kingPos.getColumn()+1).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(i, kingPos.getColumn()-1).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(kingPos.getRow(), i).equals(State.Pawn.BLACK))
+					res++;
+				if(state.getPawn(i, kingPos.getColumn()).equals(State.Pawn.BLACK))
+					res++;
+			}
+		return res;
+	}
 	public static void setWeightsAfterGenetic(){
 		try {
 			File myObj = new File(weightFilePath);

@@ -10,24 +10,22 @@ import java.util.Scanner; // Import the Scanner class to read text files
 public class WhiteHeuristic extends Heuristic {
 	static double weightVictory = 5000;
 	static double weightKingPosition = 100;
-	static double weightDistanceFromCentre = 0;
 	static double weightNumberOfWhites = 200;
 	static double weightSurroundingBlackPawn = -100;
 	static double weightNumberOfBlacks = -170;
-	static double weightThreat = -190;
-	static double weightScatter = 100;
-	static double weightNearKing =50;
+	static double weightThreat = -100;
+	static double weightWhiteNearKing =50;
+	static double weightBlackNearKing =-50;
 
 	//Weights indexes
 	final static int WEIGHT_VICTORY = 0;
 	final static int KING_POSITION = 1;
-	final static int DISTANCE_CENTRE = 2;
-	final static int NUMBER_WHITES = 3;
-	final static int SURROUNDING_BLACKS = 4;
-	final static int NUMBER_BLACKS = 5;
-	final static int THREAT = 6;
-	final static int SCATTER = 7;
-	final static int NEAR_KING = 8;
+	final static int NUMBER_WHITES = 2;
+	final static int SURROUNDING_BLACKS = 3;
+	final static int NUMBER_BLACKS = 4;
+	final static int THREAT = 5;
+	final static int BLACK_NEAR_KING = 6;
+	final static int WHITE_NEAR_KING=7;
 
 	protected static int threat(State state, Coord newCoord) {
 		return threat(state, newCoord, State.Pawn.WHITE);
@@ -36,7 +34,7 @@ public class WhiteHeuristic extends Heuristic {
 	protected static double getKingScore(Coord kingCoor) {
 		return kingScoreM[kingCoor.getRow()][kingCoor.getColumn()];
 	}
-	protected static double calculateNearKing(State state, Coord kingPos) {
+	protected static double calculateWhiteNearKing(State state, Coord kingPos) {
 		int res=0;
 		for(int i=0; i<9; i++) {
 			if(state.getPawn(kingPos.getRow()+1, i).equals(State.Pawn.WHITE))
@@ -57,12 +55,11 @@ public class WhiteHeuristic extends Heuristic {
 
 		result = weightVictory * winWithAMove(state, kingPos) +
 				weightKingPosition * getKingScore(kingPos) +
-				weightDistanceFromCentre * calculateKingCentreDistance(kingPos) +
 				weightSurroundingBlackPawn * calculateSurroundingBlackPawn(state, kingPos) +
 				weightNumberOfBlacks * numberOfBlackPawn(state) +
-				weightScatter * calculateScatter(state) +
 				weightNumberOfWhites * numberOfWhitePawn(state)+
-				weightNearKing * calculateNearKing(state, kingPos) + 
+				weightWhiteNearKing * calculateWhiteNearKing(state, kingPos) + 
+				weightBlackNearKing * calculateBlackNearKing(state, kingPos) +
 				weightThreat * threat(state, newCoord); 
 
 		return result;
@@ -70,7 +67,7 @@ public class WhiteHeuristic extends Heuristic {
 	}
 
 	public static double[] getWhiteWeights() {
-		double[] weights = {weightVictory, weightKingPosition, weightDistanceFromCentre, weightNumberOfBlacks, weightNumberOfWhites, weightSurroundingBlackPawn, weightThreat, weightScatter, weightNearKing};
+		double[] weights = {weightVictory, weightKingPosition, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks,  weightThreat,  weightBlackNearKing, weightWhiteNearKing};
 		return weights;
 	}
 
@@ -96,8 +93,6 @@ public class WhiteHeuristic extends Heuristic {
 				weightVictory = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == KING_POSITION)
 				weightKingPosition = Double.parseDouble(st.nextToken().trim());
-			if(currentIndexOfWeightInEvolutionFile == DISTANCE_CENTRE)
-				weightDistanceFromCentre = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == NUMBER_WHITES)
 				weightNumberOfWhites = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == SURROUNDING_BLACKS)
@@ -106,10 +101,10 @@ public class WhiteHeuristic extends Heuristic {
 				weightNumberOfBlacks = Double.parseDouble(st.nextToken().trim());
 			if(currentIndexOfWeightInEvolutionFile == THREAT)
 				weightThreat = Double.parseDouble(st.nextToken().trim());
-			if(currentIndexOfWeightInEvolutionFile == SCATTER)
-				weightScatter = Double.parseDouble(st.nextToken().trim());
-			if(currentIndexOfWeightInEvolutionFile == NEAR_KING)
-				weightNearKing = Double.parseDouble(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == BLACK_NEAR_KING)
+				weightBlackNearKing = Double.parseDouble(st.nextToken().trim());
+			if(currentIndexOfWeightInEvolutionFile == WHITE_NEAR_KING)
+				weightWhiteNearKing = Double.parseDouble(st.nextToken().trim());
 			currentIndexOfWeightInEvolutionFile++;
 		}
 	}
