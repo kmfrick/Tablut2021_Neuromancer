@@ -25,7 +25,7 @@ public class TablutNeuroClient extends TablutClient {
 
 	//file management for genetic algorithm
 	//TODO: Comment when deliver the application
-	protected static final String outFilePath = "/Users/kmfrick/Documents/Code/Tablut2021_Neuromancer/evolution_out.txt";
+	protected static final String outFilePath = "/tmp/NeuroClientOutput.txt";
 	private static FileWriter myWriter;
 	private final static int WIN = 0, LOSE = 1, DRAW = 2;
 	private static int matchResult;
@@ -43,28 +43,27 @@ public class TablutNeuroClient extends TablutClient {
 		}
 	 */
 
-
-	private final double UTIL_MAX = 1000;
-	private final int TIME_SEC = 10;
-
 	private TablutMinimax search;
 	private int game;
+	private int searchTime;
 
-	public TablutNeuroClient(String player, int game) throws UnknownHostException, IOException {
+	public TablutNeuroClient(String player, int game, int searchTime) throws UnknownHostException, IOException {
 		super(player, "Neuromancer");
 		this.game = game;
+		this.searchTime = searchTime;
 	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 
 		int gametype = 4;
-		if (args.length == 0) {
-			System.out.println("You must specify which player you are (WHITE or BLACK)!");
+		if (args.length < 2) {
+			System.out.println("You must specify which player you are (WHITE or BLACK) and the timeout!");
 			System.exit(-1);
 		}
 		System.out.println("Selected client: " + args[0]);
+		System.out.println("Search time: " + args[1] + " s");
 
-		TablutClient client = new TablutNeuroClient(args[0], gametype);
+		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]));
 
 		//file management for genetic algorithm
 		try {
@@ -73,6 +72,7 @@ public class TablutNeuroClient extends TablutClient {
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
+			System.exit(1);
 		}
 
 		whiteHeuristicWeights = WhiteHeuristic.getWhiteWeights();
@@ -129,7 +129,7 @@ public class TablutNeuroClient extends TablutClient {
 				System.exit(4);
 		}
 
-		search = new TablutMinimax(rules);
+		search = new TablutMinimax(rules, searchTime);
 
 		// still alive until you are playing
 		while (true) {
