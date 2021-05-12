@@ -148,17 +148,17 @@ public abstract class Heuristic {
 						result += 1;
 				}
 			}
-			/*if (newCoord.getRow() + v >= 0 && newCoord.getRow() + v <= 8) {
+			if (newCoord.getRow() + v >= 0 && newCoord.getRow() + v <= 8) {
 				if (state.getPawn(newCoord.getColumn(), newCoord.getRow() + v) == opponent) {
-					if ((v < 0 && (state.checkRight(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
-					if ((v < 0 && (state.checkLeft(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
-						|| (v > 0 && (state.checkLeft(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))) {
+					if ((v < 0 && (state.checkRight(newCoord) == opponent || state.checkBottom(newCoord) == opponent)) 
+					  || (v < 0 && (state.checkLeft(newCoord) == opponent || state.checkBottom(newCoord) == opponent))
+						|| (v > 0 && (state.checkLeft(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))
 						|| (v > 0 && (state.checkRight(newCoord) == opponent	|| state.checkUp(newCoord) == opponent))) {
 						// non so che valore dare: per ora aumento di 1 per dire che è pericoloso
 						result += 1;
 					}
 				}
-			}*/
+			}
 		}
 		return result;
 	}
