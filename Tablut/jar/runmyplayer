@@ -1,7 +1,14 @@
 #!/bin/sh
-if [[ ${1} -eq "white" ]] 
+player=${1}
+timeout=${2}
+ip=${3}
+if [[ ${player} == "white" ]]
 then
-	java -jar neurowhite.jar ${2} 1
-else
-	java -jar neuroblack.jar ${2} 1
+	echo WHITE
+	java -jar neurowhite.jar 0 ${timeout} 0 ${ip}
+fi
+if [[ ${player} == "black" ]]
+then
+	echo BLACK
+	java -jar neuroblack.jar 0 ${timeout} 0 ${ip}
 fi

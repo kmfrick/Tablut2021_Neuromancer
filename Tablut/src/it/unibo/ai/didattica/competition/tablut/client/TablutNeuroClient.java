@@ -45,33 +45,58 @@ public class TablutNeuroClient extends TablutClient {
 	 */
 
 	private TablutMinimax search;
+	boolean readWeightsFromFile;
 	private int game;
 	private int searchTime;
 	private int id;
+	private String srvAddr;
 
-	public TablutNeuroClient(String player, int game, int searchTime, int id) throws UnknownHostException, IOException {
-		super(player, "Neuromancer");
+	public TablutNeuroClient(boolean readWeightsFromFile, String player, int game, int searchTime, int id) throws UnknownHostException, IOException {
+		super(player, "Neuromancer", searchTime);
+		this.readWeightsFromFile = readWeightsFromFile;
 		this.game = game;
-		this.searchTime = searchTime;
+		this.searchTime = searchTime - 2;
 		this.id = id;
 	}
 
+	public TablutNeuroClient(boolean readWeightsFromFile, String player, int game, int searchTime, int id, String srvAddr) throws UnknownHostException, IOException {
+		super(player, "Neuromancer", searchTime, srvAddr);
+		this.readWeightsFromFile = readWeightsFromFile;
+		this.game = game;
+		this.searchTime = searchTime - 2;
+		this.id = id;
+		this.srvAddr = srvAddr;
+	}
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 
 		int gametype = 4;
-		if (args.length < 3) {
-			System.out.println("Usage: client.jar WHITE/BLACK timeout id");
+		if (args.length < 4) {
+			System.out.println("Usage: client.jar readWeightsFromFile WHITE/BLACK timeout id [serverip]");
 			System.exit(-1);
 		}
-		System.out.println("Selected client: " + args[0]);
-		System.out.println("Search time: " + args[1] + " s");
-		System.out.println("id: " + args[2]);
-
-		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+		var readWeightsFromFileStr = args[0];
+		var selectedClient = args[1];
+		var searchTime = args[2];
+		var id = args[3];
+		var srvAddr = args[4];
+		System.out.println("Selected client: " + selectedClient);
+		System.out.println("Search time: " + searchTime + " s");
+		System.out.println("id: " + id);
+		
+		boolean readWeightsFromFile = false;
+		if (Integer.parseInt(readWeightsFromFileStr) != 0) {
+			readWeightsFromFile = true;
+		}
+		TablutClient client;
+		if (args.length > 3) {
+			client = new TablutNeuroClient(readWeightsFromFile, selectedClient, gametype, Integer.parseInt(searchTime), Integer.parseInt(id), srvAddr);
+		} else {
+			client = new TablutNeuroClient(readWeightsFromFile, selectedClient, gametype, Integer.parseInt(searchTime), Integer.parseInt(id));
+		}
 
 		//file management for genetic algorithm
 		try {
-			myWriter = new FileWriter(outFilePath + args[2]);
+			myWriter = new FileWriter(outFilePath + id);
 			matchResult = -1;
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -90,11 +115,12 @@ public class TablutNeuroClient extends TablutClient {
 	@Override
 	public void run() {
 		System.out.println("You are player " + this.getPlayer().toString() + "!");
-
-		if(this.getPlayer().toString().equals("B")){
-			BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
-		} else{
-			WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+		if (this.readWeightsFromFile) {
+			if(this.getPlayer().toString().equals("B")){
+				BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			} else{
+				WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			}
 		}
 
 		String actionStringFrom = "";

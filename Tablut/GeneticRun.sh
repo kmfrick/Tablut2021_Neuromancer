@@ -9,7 +9,7 @@ play() {
 	rm logs/*
 	java -jar jar/server.jar  &
 	sleep 4
-	java -jar jar/neurowhite.jar ${TIMEOUT} ${1} > white${1}.log &
+	java -jar jar/neurowhite.jar 1 ${TIMEOUT}  ${1} localhost > white${1}.log &
 	java -jar ${BRAINMATES_PATH} black ${TIMEOUT} localhost > black${1}.log
 	sleep 4
 	cat logs/*Neuromance* | wc -l | tr -d ' ' >> /tmp/NeuroClientOutput.txt${1}
