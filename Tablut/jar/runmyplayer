@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 player=${1}
 timeout=${2}
 ip=${3}
