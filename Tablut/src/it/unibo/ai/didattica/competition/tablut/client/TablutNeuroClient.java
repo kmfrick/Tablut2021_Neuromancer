@@ -47,14 +47,12 @@ public class TablutNeuroClient extends TablutClient {
 	private TablutMinimax search;
 	private int game;
 	private int searchTime;
-	private int id;
 	private String srvAddr;
 
-	public TablutNeuroClient(String player, int game, int searchTime, int id) throws UnknownHostException, IOException {
-		super(player, "Neuromancer", searchTime);
+	public TablutNeuroClient(String player, int game, int searchTime, String srvAddr) throws UnknownHostException, IOException {
+		super(player, "Neuromancer", searchTime, srvAddr);
 		this.game = game;
 		this.searchTime = searchTime;
-		this.id = id;
 		this.srvAddr = srvAddr;
 	}
 
@@ -62,14 +60,14 @@ public class TablutNeuroClient extends TablutClient {
 
 		int gametype = 4;
 		if (args.length < 3) {
-			System.out.println("Usage: client.jar WHITE/BLACK timeout id");
+			System.out.println("Usage: client.jar WHITE/BLACK timeout srvAddr");
 			System.exit(-1);
 		}
 		System.out.println("Selected client: " + args[0]);
 		System.out.println("Search time: " + args[1] + " s");
-		System.out.println("id: " + args[2]);
+		System.out.println("Server address: " + args[2]);
 
-		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
+		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]), args[2]);
 
 		//file management for genetic algorithm
 		/*try {
