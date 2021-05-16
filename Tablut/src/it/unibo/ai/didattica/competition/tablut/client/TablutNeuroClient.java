@@ -25,13 +25,13 @@ public class TablutNeuroClient extends TablutClient {
 
 	//file management for genetic algorithm
 	//TODO: Comment when deliver the application
-	protected static final String outFilePath = "/tmp/NeuroClientOutput.txt";
-	protected static final String weightFilePath = "/tmp/NeuroWeights.txt";
-	private static FileWriter myWriter;
+	//protected static final String outFilePath = "/tmp/NeuroClientOutput.txt";
+	//protected static final String weightFilePath = "/tmp/NeuroWeights.txt";
+	//private static FileWriter myWriter;
 	private final static int WIN = 0, LOSE = 1, DRAW = 2;
 	private static int matchResult;
-	static double[] whiteHeuristicWeights;
-	static double[] blackHeuristicWeights;
+	//static double[] whiteHeuristicWeights;
+	//static double[] blackHeuristicWeights;
 	/*
 		try {
 		  FileWriter myWriter = new FileWriter("filename.txt");
@@ -70,7 +70,7 @@ public class TablutNeuroClient extends TablutClient {
 		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
 		//file management for genetic algorithm
-		try {
+		/*try {
 			//myWriter = new FileWriter(outFilePath + args[2]);
 			myWriter = new FileWriter(outFilePath);
 			matchResult = -1;
@@ -78,10 +78,10 @@ public class TablutNeuroClient extends TablutClient {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 			System.exit(1);
-		}
+		}*/
 
-		whiteHeuristicWeights = WhiteHeuristic.getWhiteWeights();
-		blackHeuristicWeights = BlackHeuristic.getBlackWeights();
+		//whiteHeuristicWeights = WhiteHeuristic.getWhiteWeights();
+		//blackHeuristicWeights = BlackHeuristic.getBlackWeights();
 
 		client.run();
 
@@ -94,10 +94,10 @@ public class TablutNeuroClient extends TablutClient {
 
 		if(this.getPlayer().toString().equals("B")){
 			//BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
-			BlackHeuristic.setWeightsAfterGenetic(weightFilePath);
+			//BlackHeuristic.setWeightsAfterGenetic(weightFilePath);
 		} else{
 			//WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
-			WhiteHeuristic.setWeightsAfterGenetic(weightFilePath);
+			//WhiteHeuristic.setWeightsAfterGenetic(weightFilePath);
 		}
 
 		String actionStringFrom = "";
@@ -183,19 +183,19 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.WHITEWIN)) {
 					System.out.println("YOU WIN!");
 
-					try {
+					/*try {
 						myWriter.write("WIN;");
 						/*
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 
 					System.exit(0);
 				}
@@ -203,19 +203,19 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.BLACKWIN)) {
 					System.out.println("YOU LOSE!");
 
-					try {
+					/*try {
 						myWriter.write("LOSE;");
 						/*
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 
 					System.exit(0);
 				}
@@ -223,19 +223,19 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.DRAW)) {
 					System.out.println("DRAW!");
 
-					try {
+					/*try {
 						myWriter.write("DRAW;");
 						/*for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
 					}
-
+					*/
 					System.exit(0);
 				}
 
@@ -270,18 +270,18 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.WHITEWIN)) {
 					matchResult = LOSE; //genetic
 					System.out.println("YOU LOSE!");
-					try {
+					/*try {
 						myWriter.write("LOSE;");
 						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+						/*myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 					System.exit(0);
 				}
 
@@ -289,18 +289,18 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.BLACKWIN)) {
 					System.out.println("YOU WIN!");
 
-					try {
+					/*try {
 						myWriter.write("WIN;");
 						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 					System.exit(0);
 				}
 
@@ -308,18 +308,18 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.DRAW)) {
 					matchResult = DRAW; //genetic
 					System.out.println("DRAW!");
-					try {
+					/*try {
 						myWriter.write("DRAW;");
 						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+						/*myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 					System.exit(0);
 				}
 

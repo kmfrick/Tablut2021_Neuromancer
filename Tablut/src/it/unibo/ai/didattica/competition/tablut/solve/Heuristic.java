@@ -261,21 +261,6 @@ public abstract class Heuristic {
 			}
 		return res;
 	}
-	/*
-	public static void setWeightsAfterGenetic(String weightFilePath){
-		try {
-			File myObj = new File(weightFilePath);
-			Scanner myReader = new Scanner(myObj);
-			while (myReader.hasNextLine()) {
-				String data = myReader.nextLine();
-				System.out.println("LETTA RIGA: " + data);
-				System.out.println(data);
-			}
-			myReader.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
-		}
-	}*/
+
 	
 }

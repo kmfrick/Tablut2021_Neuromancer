@@ -1,6 +1,6 @@
 #!/bin/bash
-BRAINMATES_PATH="/Users/antonyzappacosta/Desktop/Tablut_BrainMates/jars/BrAInmates.jar"
-NEUROGENETIC_PATH="/Users/antonyzappacosta/Desktop/LaureaMagistrale/1anno/2semestre/FondamentiAI/GeneticAlgorithmNeuromancer"
+BRAINMATES_PATH="C:/Users/davide/Desktop/brainmates/Tablut/jars/BrAInmates.jar"
+NEUROGENETIC_PATH="C:/Users/davide/Desktop/tablut/GeneticAlgorithmNeuromancer"
 TIMEOUT=1
 
 play() {

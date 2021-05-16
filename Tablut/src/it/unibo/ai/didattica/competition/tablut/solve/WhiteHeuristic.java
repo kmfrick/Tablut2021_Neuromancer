@@ -15,9 +15,8 @@ public class WhiteHeuristic extends Heuristic {
 	static double weightSurroundingBlackPawn = -174;
 	static double weightNumberOfBlacks = -243;
 	static double weightThreat = -54;
-	static double weightWhiteNearKing = -27;
-	static double weightBlackNearKing = 64;
-
+	static double weightBlackNearKing = -27;
+	static double weightWhiteNearKing = 64;
 	//Weights indexes
 	final static int WEIGHT_VICTORY = 0;
 	final static int KING_POSITION = 1;
@@ -67,7 +66,7 @@ public class WhiteHeuristic extends Heuristic {
 
 	}
 
-	public static double[] getWhiteWeights() {
+	/*public static double[] getWhiteWeights() {
 		double[] weights = {weightVictory, weightKingPosition, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks,  weightThreat,  weightBlackNearKing, weightWhiteNearKing};
 		return weights;
 	}
@@ -108,6 +107,6 @@ public class WhiteHeuristic extends Heuristic {
 				weightWhiteNearKing = Double.parseDouble(st.nextToken().trim());
 			currentIndexOfWeightInEvolutionFile++;
 		}
-	}
+	}*/
 
 }
