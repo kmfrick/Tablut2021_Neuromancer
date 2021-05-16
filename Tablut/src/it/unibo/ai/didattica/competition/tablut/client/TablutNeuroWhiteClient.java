@@ -10,10 +10,10 @@ public class TablutNeuroWhiteClient {
 	public static void main(String[] args) throws UnknownHostException, ClassNotFoundException, IOException {
 		System.out.println("NeuroWhiteClient::main() called");
 		String[] array = new String[]{"WHITE"};
-		if (args.length > 3){
-      array = new String[]{args[0], "WHITE", args[1], args[2], args[3]};
+		if (args.length > 1){
+      array = new String[]{"WHITE", args[0], args[1]};
     } else {
-			System.err.println("Not enought arguments!");
+			System.err.println("Not enough arguments!");
 			System.exit(1);
 		}
 		TablutNeuroClient.main(array);
