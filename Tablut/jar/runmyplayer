@@ -5,10 +5,10 @@ ip=${3}
 if [[ ${player} == "white" ]]
 then
 	echo WHITE
-	java -jar neurowhite.jar 0 ${timeout} 0 ${ip}
+	java -jar neurowhite.jar  ${timeout}  ${ip}
 fi
 if [[ ${player} == "black" ]]
 then
 	echo BLACK
-	java -jar neuroblack.jar 0 ${timeout} 0 ${ip}
+	java -jar neuroblack.jar  ${timeout}  ${ip}
 fi
