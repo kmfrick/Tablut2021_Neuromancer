@@ -8,14 +8,15 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 
 public class WhiteHeuristic extends Heuristic {
+	//best weights after genetic: 5000.0;100.0;200.0;-174.0;-243.0;-54.0;-27.0;64.0;
 	static double weightVictory = 5000;
 	static double weightKingPosition = 100;
 	static double weightNumberOfWhites = 200;
-	static double weightSurroundingBlackPawn = -100;
-	static double weightNumberOfBlacks = -170;
-	static double weightThreat = -100;
-	static double weightWhiteNearKing =50;
-	static double weightBlackNearKing =-50;
+	static double weightSurroundingBlackPawn = -174;
+	static double weightNumberOfBlacks = -243;
+	static double weightThreat = -54;
+	static double weightWhiteNearKing = -27;
+	static double weightBlackNearKing = 64;
 
 	//Weights indexes
 	final static int WEIGHT_VICTORY = 0;
@@ -71,7 +72,7 @@ public class WhiteHeuristic extends Heuristic {
 		return weights;
 	}
 
-	public static void setWeightsAfterGenetic(String weightFilePath){
+	public static void setWeightsAfterGenetic(){
 		String data = "";
 		try {
 			File myObj = new File(weightFilePath);
