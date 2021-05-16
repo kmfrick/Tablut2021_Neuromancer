@@ -135,7 +135,7 @@ public class TablutNeuroClient extends TablutClient {
 				System.exit(4);
 		}
 
-		search = new TablutMinimax(rules, searchTime);
+		search = new TablutMinimax(rules, searchTime-2);
 
 		// still alive until you are playing
 		while (true) {
