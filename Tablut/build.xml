@@ -9,7 +9,7 @@ di README, nella home del progetto -->
 
     <target name="compile">
         <mkdir dir="build"/>
-        <javac encoding="iso-8859-1" srcdir="src" destdir="build">
+        <javac encoding="iso-8859-1" srcdir="src" destdir="build" target="11" source="11">
             <classpath>
                 <pathelement path="lib/gson-2.2.2.jar" />
                 <pathelement path="lib/commons-cli-1.4.jar" />
