@@ -139,7 +139,7 @@ public class BlackHeuristic extends Heuristic {
 	}
 
 
-	public static double[] getBlackWeights() {
+	/*public static double[] getBlackWeights() {
 		double[] weights = {weightVictory, weightRhombus, weightRowColCover, weightNumberOfWhites, weightSurroundingBlackPawn, weightNumberOfBlacks, weightThreat,  weightBlackNearKing};
 		return weights;
 	}
@@ -180,7 +180,7 @@ public class BlackHeuristic extends Heuristic {
 				weightBlackNearKing = Double.parseDouble(st.nextToken().trim());
 			currentIndexOfWeightInEvolutionFile++;
 		}
-	}
+	}*/
 
 }
 			 

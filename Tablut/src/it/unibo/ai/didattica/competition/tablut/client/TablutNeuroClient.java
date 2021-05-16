@@ -25,13 +25,13 @@ public class TablutNeuroClient extends TablutClient {
 
 	//file management for genetic algorithm
 	//TODO: Comment when deliver the application
-	protected static final String outFilePath = "/tmp/NeuroClientOutput.txt";
-	protected static final String weightFilePath = "/tmp/NeuroWeights.txt";
-	private static FileWriter myWriter;
+	//protected static final String outFilePath = "/tmp/NeuroClientOutput.txt";
+	//protected static final String weightFilePath = "/tmp/NeuroWeights.txt";
+	//private static FileWriter myWriter;
 	private final static int WIN = 0, LOSE = 1, DRAW = 2;
 	private static int matchResult;
-	static double[] whiteHeuristicWeights;
-	static double[] blackHeuristicWeights;
+	//static double[] whiteHeuristicWeights;
+	//static double[] blackHeuristicWeights;
 	/*
 		try {
 		  FileWriter myWriter = new FileWriter("filename.txt");
@@ -45,67 +45,45 @@ public class TablutNeuroClient extends TablutClient {
 	 */
 
 	private TablutMinimax search;
-	boolean readWeightsFromFile;
 	private int game;
 	private int searchTime;
 	private int id;
 	private String srvAddr;
 
-	public TablutNeuroClient(boolean readWeightsFromFile, String player, int game, int searchTime, int id) throws UnknownHostException, IOException {
+	public TablutNeuroClient(String player, int game, int searchTime, int id) throws UnknownHostException, IOException {
 		super(player, "Neuromancer", searchTime);
-		this.readWeightsFromFile = readWeightsFromFile;
 		this.game = game;
-		this.searchTime = searchTime - 2;
-		this.id = id;
-	}
-
-	public TablutNeuroClient(boolean readWeightsFromFile, String player, int game, int searchTime, int id, String srvAddr) throws UnknownHostException, IOException {
-		super(player, "Neuromancer", searchTime, srvAddr);
-		this.readWeightsFromFile = readWeightsFromFile;
-		this.game = game;
-		this.searchTime = searchTime - 2;
+		this.searchTime = searchTime;
 		this.id = id;
 		this.srvAddr = srvAddr;
 	}
+
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException {
 
 		int gametype = 4;
-		if (args.length < 4) {
-			System.out.println("Usage: client.jar readWeightsFromFile WHITE/BLACK timeout id [serverip]");
+		if (args.length < 3) {
+			System.out.println("Usage: client.jar WHITE/BLACK timeout id");
 			System.exit(-1);
 		}
-		var readWeightsFromFileStr = args[0];
-		var selectedClient = args[1];
-		var searchTime = args[2];
-		var id = args[3];
-		var srvAddr = args[4];
-		System.out.println("Selected client: " + selectedClient);
-		System.out.println("Search time: " + searchTime + " s");
-		System.out.println("id: " + id);
-		
-		boolean readWeightsFromFile = false;
-		if (Integer.parseInt(readWeightsFromFileStr) != 0) {
-			readWeightsFromFile = true;
-		}
-		TablutClient client;
-		if (args.length > 3) {
-			client = new TablutNeuroClient(readWeightsFromFile, selectedClient, gametype, Integer.parseInt(searchTime), Integer.parseInt(id), srvAddr);
-		} else {
-			client = new TablutNeuroClient(readWeightsFromFile, selectedClient, gametype, Integer.parseInt(searchTime), Integer.parseInt(id));
-		}
+		System.out.println("Selected client: " + args[0]);
+		System.out.println("Search time: " + args[1] + " s");
+		System.out.println("id: " + args[2]);
+
+		TablutClient client = new TablutNeuroClient(args[0], gametype, Integer.parseInt(args[1]), Integer.parseInt(args[2]));
 
 		//file management for genetic algorithm
-		try {
-			myWriter = new FileWriter(outFilePath + id);
+		/*try {
+			//myWriter = new FileWriter(outFilePath + args[2]);
+			myWriter = new FileWriter(outFilePath);
 			matchResult = -1;
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 			System.exit(1);
-		}
+		}*/
 
-		whiteHeuristicWeights = WhiteHeuristic.getWhiteWeights();
-		blackHeuristicWeights = BlackHeuristic.getBlackWeights();
+		//whiteHeuristicWeights = WhiteHeuristic.getWhiteWeights();
+		//blackHeuristicWeights = BlackHeuristic.getBlackWeights();
 
 		client.run();
 
@@ -115,12 +93,13 @@ public class TablutNeuroClient extends TablutClient {
 	@Override
 	public void run() {
 		System.out.println("You are player " + this.getPlayer().toString() + "!");
-		if (this.readWeightsFromFile) {
-			if(this.getPlayer().toString().equals("B")){
-				BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
-			} else{
-				WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
-			}
+
+		if(this.getPlayer().toString().equals("B")){
+			//BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			//BlackHeuristic.setWeightsAfterGenetic(weightFilePath);
+		} else{
+			//WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			//WhiteHeuristic.setWeightsAfterGenetic(weightFilePath);
 		}
 
 		String actionStringFrom = "";
@@ -158,7 +137,7 @@ public class TablutNeuroClient extends TablutClient {
 				System.exit(4);
 		}
 
-		search = new TablutMinimax(rules, searchTime);
+		search = new TablutMinimax(rules, searchTime-2);
 
 		// still alive until you are playing
 		while (true) {
@@ -206,19 +185,19 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.WHITEWIN)) {
 					System.out.println("YOU WIN!");
 
-					try {
+					/*try {
 						myWriter.write("WIN;");
 						/*
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 
 					System.exit(0);
 				}
@@ -226,19 +205,19 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.BLACKWIN)) {
 					System.out.println("YOU LOSE!");
 
-					try {
+					/*try {
 						myWriter.write("LOSE;");
 						/*
 						for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 
 					System.exit(0);
 				}
@@ -246,19 +225,19 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.DRAW)) {
 					System.out.println("DRAW!");
 
-					try {
+					/*try {
 						myWriter.write("DRAW;");
 						/*for(double peso : whiteHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
 					}
-
+					*/
 					System.exit(0);
 				}
 
@@ -293,18 +272,18 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.WHITEWIN)) {
 					matchResult = LOSE; //genetic
 					System.out.println("YOU LOSE!");
-					try {
+					/*try {
 						myWriter.write("LOSE;");
 						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+						/*myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 					System.exit(0);
 				}
 
@@ -312,18 +291,18 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.BLACKWIN)) {
 					System.out.println("YOU WIN!");
 
-					try {
+					/*try {
 						myWriter.write("WIN;");
 						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+					/*	myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 					System.exit(0);
 				}
 
@@ -331,18 +310,18 @@ public class TablutNeuroClient extends TablutClient {
 				else if (state.getTurn().equals(StateTablut.Turn.DRAW)) {
 					matchResult = DRAW; //genetic
 					System.out.println("DRAW!");
-					try {
+					/*try {
 						myWriter.write("DRAW;");
 						/*for(double peso : blackHeuristicWeights){
 							myWriter.write(peso + ";");
 						}
 						myWriter.write("\n");*/
-						myWriter.close();
+						/*myWriter.close();
 						System.out.println("Successfully wrote to the file. " + matchResult);
 					} catch (IOException e) {
 						System.out.println("An error occurred.");
 						e.printStackTrace();
-					}
+					}*/
 					System.exit(0);
 				}
 
