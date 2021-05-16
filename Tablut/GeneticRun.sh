@@ -1,7 +1,7 @@
 #!/bin/bash
-BRAINMATES_PATH="/Users/kmfrick/Documents/Code/Tablut2020_BrAInmates/jars/BrAInmates.jar"
-NEUROGENETIC_PATH="/Users/kmfrick/Documents/Code/GeneticAlgorithmNeuromancer"
-TIMEOUT=50
+BRAINMATES_PATH="/Users/antonyzappacosta/Desktop/Tablut_BrainMates/jars/BrAInmates.jar"
+NEUROGENETIC_PATH="/Users/antonyzappacosta/Desktop/LaureaMagistrale/1anno/2semestre/FondamentiAI/GeneticAlgorithmNeuromancer"
+TIMEOUT=1
 
 play() {
 	echo "Removing game_start${1}"
@@ -12,7 +12,8 @@ play() {
 	java -jar jar/neurowhite.jar ${TIMEOUT} ${1} > white${1}.log &
 	java -jar ${BRAINMATES_PATH} black ${TIMEOUT} localhost > black${1}.log
 	sleep 4
-	cat logs/*Neuromance* | wc -l | tr -d ' ' >> /tmp/NeuroClientOutput.txt${1}
+	#cat logs/*Neuromance* | wc -l | tr -d ' ' >> /tmp/NeuroClientOutput.txt${1} WE DO NOT USE IDEXES
+	cat logs/*Neuromance* | wc -l | tr -d ' ' >> /tmp/NeuroClientOutput.txt
 	echo "Creating genetic_start${1}"
 	touch /tmp/genetic_start${1}
 }
@@ -29,9 +30,11 @@ killall java # Dangerous :)
 rm genetic${ID}.log black${ID}.log white${ID}.log server${ID}.log
 play ${ID}
 java -cp ${NEUROGENETIC_PATH} MainGeneticAlgorithm  0  WHITE  &
-while [[ $(grep WIN /tmp/NeuroClientOutput.txt${ID} | wc -l) -ne 1 ]]
+#while [[ $(grep WIN /tmp/NeuroClientOutput.txt${ID} | wc -l) -ne 1 ]] WE DO NOT USE INDEXES
+while [[ $(grep WIN /tmp/NeuroClientOutput.txt | wc -l) -ne 1 ]]
 do
-	grep WIN /tmp/NeuroClientOutput.txt${ID} | wc -l
+	#grep WIN /tmp/NeuroClientOutput.txt${ID} | wc -l WE DO NOT USE INDEXES
+	grep WIN /tmp/NeuroClientOutput.txt | wc -l
 	echo "Waiting for /tmp/game_start${ID}"
 	while [[  ! -f /tmp/game_start${ID} ]]  
 	do

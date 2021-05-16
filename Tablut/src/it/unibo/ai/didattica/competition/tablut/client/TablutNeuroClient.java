@@ -71,7 +71,8 @@ public class TablutNeuroClient extends TablutClient {
 
 		//file management for genetic algorithm
 		try {
-			myWriter = new FileWriter(outFilePath + args[2]);
+			//myWriter = new FileWriter(outFilePath + args[2]);
+			myWriter = new FileWriter(outFilePath);
 			matchResult = -1;
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -92,9 +93,11 @@ public class TablutNeuroClient extends TablutClient {
 		System.out.println("You are player " + this.getPlayer().toString() + "!");
 
 		if(this.getPlayer().toString().equals("B")){
-			BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			//BlackHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			BlackHeuristic.setWeightsAfterGenetic(weightFilePath);
 		} else{
-			WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			//WhiteHeuristic.setWeightsAfterGenetic(weightFilePath + id);
+			WhiteHeuristic.setWeightsAfterGenetic(weightFilePath);
 		}
 
 		String actionStringFrom = "";
